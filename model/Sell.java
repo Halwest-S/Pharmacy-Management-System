@@ -78,6 +78,19 @@ public class Sell {
     public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
     }
+    @Override
+    public String toString() {
+        return "Sell{" +
+                "sellID=" + sellID +
+                ", itemName='" + itemName + '\'' +
+                ", itemPrice=" + itemPrice +
+                ", userName='" + userName + '\'' +
+                ", sellQuantity=" + sellQuantity +
+                ", sellTotalPrice=" + sellTotalPrice +
+                ", sellDate=" + sellDate +
+                '}';
+    }
+
 }
 
 

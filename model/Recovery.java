@@ -80,4 +80,17 @@ public class Recovery {
     public void setItemPrice(String itemPrice) {
         this.itemPrice = itemPrice;
     }
+    @Override
+    public String toString() {
+        return "Recovery{" +
+                "recoveryID=" + recoveryID +
+                ", itemName='" + itemName + '\'' +
+                ", itemPrice='" + itemPrice + '\'' +
+                ", userName='" + userName + '\'' +
+                ", recoveryQuantity=" + recoveryQuantity +
+                ", recoveryTotalPrice=" + recoveryTotalPrice +
+                ", recoveryDate='" + recoveryDate + '\'' +
+                '}';
+    }
+
 }

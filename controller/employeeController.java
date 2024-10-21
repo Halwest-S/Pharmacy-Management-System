@@ -1,47 +1,65 @@
 package controller;
 
 import model.Employee;
+import Util.FileUtil;
 
 import java.util.ArrayList;
 
 public class employeeController {
-    private final ArrayList<Employee> employeeList = new ArrayList<>();
+    private ArrayList<Employee> employeeList;
+    private static final String FILE_NAME = "employees";
 
-    // Add employee if not already in the list
+    public employeeController() {
+        loadEmployees();
+    }
+
+    private void loadEmployees() {
+        employeeList = (ArrayList<Employee>) FileUtil.readFromFile(FILE_NAME);
+        if (employeeList == null) {
+            employeeList = new ArrayList<>();
+        }
+    }
+
+    private void saveEmployees() {
+        FileUtil.writeToFile(FILE_NAME, employeeList);
+    }
+
+
     public void addEmployee(Employee employee) {
         if (getEmployeeById(employee.getEmployeeID()) == null) {
             employeeList.add(employee);
+            saveEmployees();
         } else {
             System.out.println("Employee with ID " + employee.getEmployeeID() + " already exists.");
         }
     }
 
-    // Remove employee by ID
     public void removeEmployee(int id) {
         employeeList.removeIf((Employee employee) -> employee.getEmployeeID() == id);
+        saveEmployees();
     }
 
-    // Get employee by ID
     public Employee getEmployeeById(int id) {
         for (Employee employee : employeeList) {
             if (employee.getEmployeeID() == id) {
-                return employee;
+                return employee;  // Simply return the found employee
             }
         }
-        return null;
+        return null;  // Return null if not found
     }
 
-    // Get all employees
+
     public ArrayList<Employee> getAllEmployees() {
+        loadEmployees();
         return employeeList;
     }
 
-    // Update employee details by ID
     public void updateEmployee(int id, String employeeName, String employeePassword) {
         Employee employee = getEmployeeById(id);
         if (employee != null) {
             employee.setEmployeeName(employeeName);
             employee.setEmployeePassword(employeePassword);
+            saveEmployees();
         } else {
             System.out.println("Employee with ID " + id + " not found.");
         }

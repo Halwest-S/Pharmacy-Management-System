@@ -1,6 +1,6 @@
 package model;
-
-public class Employee {
+import java.io.Serializable;
+public class Employee implements Serializable   {
     private int employeeID;
     private String employeeName;
     private String employeePassword;
@@ -26,4 +26,13 @@ public class Employee {
     public void setEmployeePassword(String employeePassword) {
         this.employeePassword = employeePassword;
     }
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeID=" + employeeID +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeePassword='" + employeePassword + '\'' +
+                '}';
+    }
+
 }

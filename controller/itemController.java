@@ -5,7 +5,7 @@ package controller;
         import java.util.ArrayList;
 
 public class itemController {
-    private final ArrayList<Item> itemsList = new ArrayList<>();
+    private static final ArrayList<Item> itemsList = new ArrayList<>();
 
     // Add item if not already in the list
     public void addItem(Item item) {
@@ -32,7 +32,7 @@ public class itemController {
     }
 
     // Get all items
-    public ArrayList<Item> getAllItems() {
+    public static ArrayList<Item> getAllItems() {
         return itemsList;
     }
 

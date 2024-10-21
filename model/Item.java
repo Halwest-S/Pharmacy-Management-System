@@ -116,5 +116,21 @@ public class Item {
         this.expiryDate = expiryDate;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemID=" + itemID +
+                ", scientificName='" + scientificName + '\'' +
+                ", commonName='" + commonName + '\'' +
+                ", company='" + company + '\'' +
+                ", country='" + country + '\'' +
+                ", category='" + category + '\'' +
+                ", importPrice=" + importPrice +
+                ", exportPrice=" + exportPrice +
+                ", quantity=" + quantity +
+                ", importDate='" + importDate + '\'' +
+                ", expiryDate='" + expiryDate + '\'' +
+                '}';
+    }
 
 }

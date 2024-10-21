@@ -1,9 +1,14 @@
 package view;
 
+import controller.itemController;
+import model.Item;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class EmployeeView {
     private Scanner scanner = new Scanner(System.in);
+    private itemController itemController = new itemController();
 
     public void display() {
         while (true) {
@@ -35,9 +40,17 @@ public class EmployeeView {
         }
     }
 
+    // Access item info logic
     private void accessItemInfo() {
         System.out.println("Accessing Item Info...");
-        // Implement item info access logic
+        ArrayList<Item> items = itemController.getAllItems();
+        if (items.isEmpty()) {
+            System.out.println("No items available.");
+            return;
+        }
+        for (Item item : items) {
+            System.out.println(item); // Ensure Item class has a proper toString method
+        }
     }
 
     private void handleSales() {
@@ -50,4 +63,3 @@ public class EmployeeView {
         // Implement item classification logic
     }
 }
-
