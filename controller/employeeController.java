@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class employeeController {
     private ArrayList<Employee> employeeList;
-    private static final String FILE_NAME = "employees";
+    private static final String FILE_NAME = "employees.txt";
 
     public employeeController() {
         loadEmployees();

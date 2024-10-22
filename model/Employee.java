@@ -29,9 +29,9 @@ public class Employee implements Serializable   {
     @Override
     public String toString() {
         return "Employee ( " +
-                "employeeID=" + employeeID +
-                ", employeeName='" + employeeName +
-                ", employeePassword='" + employeePassword +
+                "employeeID: " + employeeID +
+                ", employeeName: " + employeeName +
+                ", employeePassword: " + employeePassword +
                 ')';
     }
 

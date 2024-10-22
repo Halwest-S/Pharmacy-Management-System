@@ -30,11 +30,11 @@ public class Manager implements Serializable {
     }
     @Override
     public String toString() {
-        return "Manager{" +
+        return "Manager ( " +
                 "managerID=" + managerID +
-                ", managerName='" + managerName + '\'' +
-                ", managerPassword='" + managerPassword + '\'' +
-                '}';
+                ", managerName='" + managerName +
+                ", managerPassword='" + managerPassword +
+                ')';
     }
 
 }
