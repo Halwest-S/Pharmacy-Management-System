@@ -5,7 +5,7 @@ import model.Recovery;
 import java.util.ArrayList;
 
 public class recoveryController {
-    private final ArrayList<Recovery> recoveryList = new ArrayList<>();
+    private static final ArrayList<Recovery> recoveryList = new ArrayList<>();
 
     // Add a new recovery
     public static void addRecovery(Recovery recovery) {

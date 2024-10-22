@@ -21,7 +21,7 @@ public class sellController {
         }
     }
 
-    private void saveSells() {
+    private static void saveSells() {
         FileUtil.writeToFile(FILE_NAME, sellsList);
     }
 
@@ -43,7 +43,7 @@ public class sellController {
     }
 
     // Get a sale by ID
-    public Sell getSellById(int id) {
+    public static Sell getSellById(int id) {
         for (Sell sell : sellsList) {
             if (sell.getSellID() == id) {
                 return sell;

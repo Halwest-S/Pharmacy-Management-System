@@ -81,15 +81,15 @@ public class Sell implements Serializable {
     }
     @Override
     public String toString() {
-        return "Sell{" +
+        return "Sell ( " +
                 "sellID=" + sellID +
-                ", itemName='" + itemName + '\'' +
+                ", itemName='" + itemName +
                 ", itemPrice=" + itemPrice +
-                ", userName='" + userName + '\'' +
+                ", userName='" + userName +
                 ", sellQuantity=" + sellQuantity +
                 ", sellTotalPrice=" + sellTotalPrice +
                 ", sellDate=" + sellDate +
-                '}';
+                ')';
     }
 
 }

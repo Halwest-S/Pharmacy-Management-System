@@ -1,10 +1,29 @@
 package controller;
 
+        import Util.FileUtil;
+        import model.Employee;
         import model.Item;
 
         import java.util.ArrayList;
 
 public class itemController {
+    private ArrayList<Employee> itemList;
+    private static final String FILE_NAME = "item.txt";
+
+
+
+    private void loadItems() {
+        itemList = (ArrayList<Employee>) FileUtil.readFromFile(FILE_NAME);
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+        }
+    }
+
+    private void saveItmes(){
+        FileUtil.writeToFile(FILE_NAME, itemList);
+    }
+
+
     private static final ArrayList<Item> itemsList = new ArrayList<>();
 
     // Add item if not already in the list

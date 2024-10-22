@@ -130,8 +130,7 @@ public class ManagerView {
         String userName = scanner.nextLine();
         System.out.print("Enter Quantity: ");
         int quantity = scanner.nextInt();
-        System.out.print("Enter Total Price: ");
-        double totalPrice = scanner.nextDouble();
+        double totalPrice = itemPrice*quantity;
         scanner.nextLine(); // Consume newline
         System.out.print("Enter Sale Date: ");
         String sellDate = scanner.nextLine();
