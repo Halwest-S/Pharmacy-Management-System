@@ -84,15 +84,15 @@ public class Recovery implements Serializable {
     }
     @Override
     public String toString() {
-        return "Recovery{" +
+        return "Recovery ( " +
                 "recoveryID=" + recoveryID +
-                ", itemName='" + itemName + '\'' +
-                ", itemPrice='" + itemPrice + '\'' +
-                ", userName='" + userName + '\'' +
+                ", itemName='" + itemName +
+                ", itemPrice='" + itemPrice +
+                ", userName='" + userName +
                 ", recoveryQuantity=" + recoveryQuantity +
                 ", recoveryTotalPrice=" + recoveryTotalPrice +
-                ", recoveryDate='" + recoveryDate + '\'' +
-                '}';
+                ", recoveryDate='" + recoveryDate +
+                ')';
     }
 
 }

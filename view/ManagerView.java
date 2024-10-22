@@ -150,18 +150,18 @@ public class ManagerView {
     private void updateSale() {
         System.out.print("Enter Sale ID to update: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
         System.out.print("Enter new Item Name: ");
         String itemName = scanner.nextLine();
         System.out.print("Enter new Item Price: ");
         double itemPrice = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
         System.out.print("Enter new User Name: ");
         String userName = scanner.nextLine();
         System.out.print("Enter new Quantity: ");
         int quantity = scanner.nextInt();
-        System.out.print("Enter new Total Price: ");
-        double totalPrice = scanner.nextDouble();
+
+        double totalPrice = itemPrice*quantity;
         scanner.nextLine(); // Consume newline
         System.out.print("Enter new Sale Date: ");
         String sellDate = scanner.nextLine();
@@ -188,7 +188,7 @@ public class ManagerView {
         System.out.println("3. Update Recovery");
         System.out.println("4. List All Recoveries");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
 
         switch (choice) {
             case 1:
@@ -252,7 +252,7 @@ public class ManagerView {
         int quantity = scanner.nextInt();
         System.out.print("Enter new Total Price: ");
         double totalPrice = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
         System.out.print("Enter new Recovery Date: ");
         String recoveryDate = scanner.nextLine();
 
@@ -288,7 +288,7 @@ public class ManagerView {
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -314,7 +314,7 @@ public class ManagerView {
     private void addItem() {
         System.out.print("Enter Item ID: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
         System.out.print("Enter Scientific Name: ");
         String scientificName = scanner.nextLine();
         System.out.print("Enter Common Name: ");
@@ -386,7 +386,7 @@ public class ManagerView {
             return;
         }
         for (Item item : items) {
-            System.out.println(item); // Ensure Item class has a proper toString method
+            System.out.println(item);
         }
     }
 
@@ -401,7 +401,7 @@ public class ManagerView {
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -465,12 +465,12 @@ public class ManagerView {
             return;
         }
         for (Employee employee : employees) {
-            System.out.println(employee); // Ensure Employee class has a proper toString method
+            System.out.println(employee);
         }
     }
 
     private void generateReport() {
         System.out.println("Generating Report...");
-        // Implement report generation logic as per your requirements
+
     }
 }

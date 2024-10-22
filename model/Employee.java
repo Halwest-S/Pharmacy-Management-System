@@ -28,11 +28,11 @@ public class Employee implements Serializable   {
     }
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Employee ( " +
                 "employeeID=" + employeeID +
-                ", employeeName='" + employeeName + '\'' +
-                ", employeePassword='" + employeePassword + '\'' +
-                '}';
+                ", employeeName='" + employeeName +
+                ", employeePassword='" + employeePassword +
+                ')';
     }
 
 }

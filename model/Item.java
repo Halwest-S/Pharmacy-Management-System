@@ -120,19 +120,19 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item{" +
+        return "Item ( " +
                 "itemID=" + itemID +
-                ", scientificName='" + scientificName + '\'' +
-                ", commonName='" + commonName + '\'' +
-                ", company='" + company + '\'' +
-                ", country='" + country + '\'' +
-                ", category='" + category + '\'' +
+                ", scientificName='" + scientificName +
+                ", commonName='" + commonName +
+                ", company='" + company +
+                ", country='" + country +
+                ", category='" + category +
                 ", importPrice=" + importPrice +
                 ", exportPrice=" + exportPrice +
                 ", quantity=" + quantity +
-                ", importDate='" + importDate + '\'' +
-                ", expiryDate='" + expiryDate + '\'' +
-                '}';
+                ", importDate='" + importDate +
+                ", expiryDate='" + expiryDate +
+                ')';
     }
 
 }
