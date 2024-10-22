@@ -7,29 +7,30 @@ package controller;
         import java.util.ArrayList;
 
 public class itemController {
-    private ArrayList<Employee> itemList;
+    private static ArrayList<Item> itemsList;
     private static final String FILE_NAME = "item.txt";
 
 
 
-    private void loadItems() {
-        itemList = (ArrayList<Employee>) FileUtil.readFromFile(FILE_NAME);
-        if (itemList == null) {
-            itemList = new ArrayList<>();
+    private static void loadItems() {
+        itemsList = (ArrayList<Item>) FileUtil.readFromFile(FILE_NAME);
+        if (itemsList == null) {
+            itemsList = new ArrayList<>();
         }
     }
 
     private void saveItmes(){
-        FileUtil.writeToFile(FILE_NAME, itemList);
+        FileUtil.writeToFile(FILE_NAME, itemsList);
     }
 
 
-    private static final ArrayList<Item> itemsList = new ArrayList<>();
+
 
     // Add item if not already in the list
     public void addItem(Item item) {
         if (getItemById(item.getItemID()) == null) {
             itemsList.add(item);
+            saveItmes();
         } else {
             System.out.println("Item with ID " + item.getItemID() + " already exists.");
         }
@@ -38,6 +39,7 @@ public class itemController {
     // Remove item by ID
     public void removeItem(int id) {
         itemsList.removeIf((Item item) -> item.getItemID() == id);
+        saveItmes();
     }
 
     // Get item by ID
@@ -52,6 +54,7 @@ public class itemController {
 
     // Get all items
     public static ArrayList<Item> getAllItems() {
+        loadItems();
         return itemsList;
     }
 
