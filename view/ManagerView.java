@@ -22,7 +22,7 @@ public class ManagerView {
         while (true) {
             System.out.println("\nManager Menu");
             System.out.println("1. Access Item Info");
-            System.out.println("2. Handle Sales");
+            System.out.println("2. Handle Sales or recovery");
             System.out.println("3. Classify Item");
             System.out.println("4. Manage Items");
             System.out.println("5. Manage Employees");
@@ -97,7 +97,7 @@ public class ManagerView {
         System.out.println("3. Update Sale");
         System.out.println("4. List All Sales");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
 
         switch (choice) {
             case 1:
