@@ -1,6 +1,8 @@
 package model;
 
-public class Recovery {
+import java.io.Serializable;
+
+public class Recovery implements Serializable {
     private int recoveryID;
     private String itemName;
     private String itemPrice;

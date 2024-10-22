@@ -8,12 +8,12 @@ public class recoveryController {
     private final ArrayList<Recovery> recoveryList = new ArrayList<>();
 
     // Add a new recovery
-    public void addRecovery(Recovery recovery) {
+    public static void addRecovery(Recovery recovery) {
         recoveryList.add(recovery);
     }
 
     // Remove a recovery by ID
-    public void removeRecovery(int id) {
+    public static void removeRecovery(int id) {
         recoveryList.removeIf(recovery -> recovery.getRecoveryID() == id);
     }
 
@@ -28,12 +28,12 @@ public class recoveryController {
     }
 
     // Get all recoveries
-    public ArrayList<Recovery> getAllRecoveries() {
+    public static ArrayList<Recovery> getAllRecoveries() {
         return new ArrayList<>(recoveryList);
     }
 
     // Update a recovery
-    public void updateRecovery(int id, Recovery updatedRecovery) {
+    public static void updateRecovery(int id, Recovery updatedRecovery) {
         for (int i = 0; i < recoveryList.size(); i++) {
             if (recoveryList.get(i).getRecoveryID() == id) {
                 recoveryList.set(i, updatedRecovery);

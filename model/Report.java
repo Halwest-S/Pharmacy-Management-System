@@ -1,6 +1,8 @@
 package model;
 
-public class Report {
+import java.io.Serializable;
+
+public class Report implements Serializable {
     private int reportID;
     private String transactionType;
     private String itemName;

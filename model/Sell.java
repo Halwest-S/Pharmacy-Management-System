@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Sell {
+public class Sell implements Serializable {
     private int sellID;
     private String itemName;
     private double itemPrice;

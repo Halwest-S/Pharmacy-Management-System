@@ -1,6 +1,8 @@
 package model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private int userID;
     private String username; // should match your getter method name
     private String password;
