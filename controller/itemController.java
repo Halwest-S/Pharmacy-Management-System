@@ -40,6 +40,7 @@ public class itemController {
     public void removeItem(int id) {
         itemsList.removeIf((Item item) -> item.getItemID() == id);
         saveItmes();
+
     }
 
     // Get item by ID
