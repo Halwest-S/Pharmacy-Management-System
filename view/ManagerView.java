@@ -1,5 +1,6 @@
 package view;
 
+import controller.Client.Client;
 import controller.employeeController;
 import controller.itemController;
 import controller.sellController;
@@ -9,6 +10,7 @@ import model.Item;
 import model.Sell;
 import model.Recovery;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -369,13 +371,14 @@ public class ManagerView {
         String expiryDate = scanner.nextLine();
 
         Item newItem = new Item(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
-        itemController.addItem(newItem);
-        System.out.println("Item added successfully.");
+            // Send to server only
+            String response = Client.addItem(newItem);
+            System.out.println(response != null ? response : "Failed to add item.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data.");
-            scanner.nextLine(); // Clear the invalid input
+            scanner.nextLine();
         } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage());
+           // System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
@@ -432,18 +435,22 @@ public class ManagerView {
 
     private void listItems() {
         try {
-            ArrayList<Item> items = controller.itemController.getAllItems();
-            if (items.isEmpty()) {
+            ArrayList<Item> items = Client.getAllItems();  // Fetch items from the server
+
+            if (items == null || items.isEmpty()) {
                 System.out.println("No items available.");
-            } else {
-                for (Item item : items) {
-                    System.out.println(item);
-                }
             }
-        } catch (Exception e) {
-            System.out.println("An error occurred while listing items: " + e.getMessage());
+                for (Item item : items) {
+                    System.out.println(item);  // Display each item
+                }
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred while listing items: " + e);  // More informative message
         }
     }
+
+
+
 
     private void manageEmployees() {
         while (true) {
@@ -486,6 +493,7 @@ public class ManagerView {
         String name = scanner.nextLine();
         System.out.print("Enter Employee Password: ");
         String password = scanner.nextLine();
+
 
         Employee newEmployee = new Employee(id, name, password);
         employeeController.addEmployee(newEmployee);

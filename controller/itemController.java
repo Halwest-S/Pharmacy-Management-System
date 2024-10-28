@@ -1,17 +1,20 @@
 package controller;
 
-        import Util.FileUtil;
-        import model.Employee;
-        import model.Item;
+import Util.FileUtil;
+import model.Item;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class itemController {
     private static ArrayList<Item> itemsList;
     private static final String FILE_NAME = "item.txt";
 
+    // Constructor that loads items from file when the controller is created
+    public itemController() {
+        loadItems();
+    }
 
-
+    // Load items from file or initialize if file is empty
     private static void loadItems() {
         itemsList = (ArrayList<Item>) FileUtil.readFromFile(FILE_NAME);
         if (itemsList == null) {
@@ -19,18 +22,16 @@ public class itemController {
         }
     }
 
-    private void saveItmes(){
+    // Save items to file
+    private void saveItems() {
         FileUtil.writeToFile(FILE_NAME, itemsList);
     }
-
-
-
 
     // Add item if not already in the list
     public void addItem(Item item) {
         if (getItemById(item.getItemID()) == null) {
             itemsList.add(item);
-            saveItmes();
+            saveItems();
         } else {
             System.out.println("Item with ID " + item.getItemID() + " already exists.");
         }
@@ -39,8 +40,7 @@ public class itemController {
     // Remove item by ID
     public void removeItem(int id) {
         itemsList.removeIf((Item item) -> item.getItemID() == id);
-        saveItmes();
-
+        saveItems();
     }
 
     // Get item by ID
@@ -53,9 +53,8 @@ public class itemController {
         return null;
     }
 
-    // Get all items
+    // Get all items (itemsList is already initialized in constructor)
     public static ArrayList<Item> getAllItems() {
-        loadItems();
         return itemsList;
     }
 
@@ -74,6 +73,7 @@ public class itemController {
             item.setQuantity(quantity);
             item.setImportDate(importDate);
             item.setExpiryDate(expiryDate);
+            saveItems();
         } else {
             System.out.println("Item with ID " + id + " not found.");
         }
