@@ -65,10 +65,16 @@ public class ManagerView {
             if (items.isEmpty()) {
                 System.out.println("No items available.");
                 return;
+
+            }else {
+                System.out.println("\n==============================" +
+                        "\n          ITEM DETAILS         " +
+                        "\n==============================" );
             }
             for (Item item : items) {
                 System.out.println(item); // Ensure Item class has a proper toString method
             }
+
         } catch (Exception e) {
             System.out.println("Failed to access item info: " + e.getMessage());
         }
@@ -130,9 +136,7 @@ public class ManagerView {
         System.out.print("Enter Quantity: ");
         int quantity = scanner.nextInt();
         double totalPrice = itemPrice*quantity;
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Sale Date: ");
-        String sellDate = scanner.nextLine();
+
 
         Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
         sellController.addSell(sell);
@@ -190,6 +194,9 @@ public class ManagerView {
         if (sales.isEmpty()) {
             System.out.println("No sales available.");
         } else {
+            System.out.println("\n**********************************" +
+                    "\n           SELL DETAILS           " +
+                    "\n**********************************" );
             for (Sell sell : sales) {
                 System.out.println(sell);
             }
@@ -230,6 +237,7 @@ public class ManagerView {
         String itemName = scanner.nextLine();
         System.out.print("Enter Item Price: ");
         double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
         System.out.print("Enter User Name: ");
         String userName = scanner.nextLine();
         System.out.print("Enter Quantity: ");
@@ -240,7 +248,7 @@ public class ManagerView {
         System.out.print("Enter Recovery Date: ");
         String recoveryDate = scanner.nextLine();
 
-        Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+        Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
         recoveryController.addRecovery(recovery);
         System.out.println("Recovery added successfully.");
         } catch (InputMismatchException e) {
@@ -280,7 +288,7 @@ public class ManagerView {
         System.out.print("Enter new Recovery Date: ");
         String recoveryDate = scanner.nextLine();
 
-        Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+        Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
         recoveryController.updateRecovery(id, updatedRecovery);
         System.out.println("Recovery updated successfully.");
         } catch (InputMismatchException e) {
@@ -295,6 +303,9 @@ public class ManagerView {
         if (recoveries.isEmpty()) {
             System.out.println("No recoveries available.");
         } else {
+            System.out.println("\n----------------------------------" +
+                    "\n          RECOVERY DETAILS        " +
+                    "\n----------------------------------" );
             for (Recovery recovery : recoveries) {
                 System.out.println(recovery);
             }
@@ -436,6 +447,9 @@ public class ManagerView {
             if (items.isEmpty()) {
                 System.out.println("No items available.");
             } else {
+                System.out.println("\n==============================" +
+                        "\n          ITEM DETAILS         " +
+                        "\n==============================" );
                 for (Item item : items) {
                     System.out.println(item);
                 }
@@ -538,10 +552,13 @@ public class ManagerView {
         if (employees.isEmpty()) {
             System.out.println("No employees available.");
             return;
-        }
+        }else {
+            System.out.println("\n==============================" +
+                    "\n        EMPLOYEE DETAILS       " +
+                    "\n==============================" );
         for (Employee employee : employees) {
             System.out.println(employee);
-        }
+        }}
         } catch (Exception e) {
             System.out.println("An error occurred while listing employees: " + e.getMessage());
         }

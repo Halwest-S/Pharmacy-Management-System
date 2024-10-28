@@ -81,9 +81,7 @@ public class Sell implements Serializable {
     }
     @Override
     public String toString() {
-        return "\n**********************************" +
-                "\n           SELL DETAILS           " +
-                "\n**********************************" +
+        return
                 "\nSell ID           : " + sellID +
                 "\nItem Name         : " + itemName +
                 "\nItem Price        : $" + String.format("%.2f", itemPrice) +

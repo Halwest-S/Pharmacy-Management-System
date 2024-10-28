@@ -7,6 +7,7 @@ import model.Item;
 import model.Recovery;
 import model.Sell;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -45,6 +46,7 @@ public class EmployeeView {
                 scanner.nextLine(); // Clear invalid input
             } catch (Exception e) {
                 System.out.println("An error occurred: " + e.getMessage());
+
             }
         }
     }
@@ -57,10 +59,16 @@ public class EmployeeView {
             if (items.isEmpty()) {
                 System.out.println("No items available.");
                 return;
+
+            }else {
+                System.out.println("\n==============================" +
+                        "\n          ITEM DETAILS         " +
+                        "\n==============================" );
             }
             for (Item item : items) {
                 System.out.println(item); // Ensure Item class has a proper toString method
             }
+
         } catch (Exception e) {
             System.out.println("Failed to access item info: " + e.getMessage());
         }
@@ -126,9 +134,8 @@ public class EmployeeView {
             System.out.print("Enter Quantity: ");
             int quantity = scanner.nextInt();
             double totalPrice = itemPrice * quantity;
-            scanner.nextLine(); // Consume newline
-            System.out.print("Enter Sale Date: ");
-            String sellDate = scanner.nextLine();
+
+
 
             Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
             controller.sellController.addSell(sell);
@@ -192,6 +199,9 @@ public class EmployeeView {
             if (sales.isEmpty()) {
                 System.out.println("No sales available.");
             } else {
+                System.out.println("\n**********************************" +
+                        "\n           SELL DETAILS           " +
+                        "\n**********************************" );
                 for (Sell sell : sales) {
                     System.out.println(sell);
                 }
@@ -234,17 +244,16 @@ public class EmployeeView {
             String itemName = scanner.nextLine();
             System.out.print("Enter Item Price: ");
             double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
             System.out.print("Enter User Name: ");
             String userName = scanner.nextLine();
             System.out.print("Enter Quantity: ");
             int quantity = scanner.nextInt();
 
             double totalPrice = itemPrice*quantity;
-            scanner.nextLine(); // Consume newline
-            System.out.print("Enter Recovery Date: ");
-            String recoveryDate = scanner.nextLine();
 
-            Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+
+            Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
             controller.recoveryController.addRecovery(recovery);
             System.out.println("Recovery added successfully.");
         } catch (InputMismatchException e) {
@@ -287,7 +296,7 @@ public class EmployeeView {
             System.out.print("Enter new Recovery Date: ");
             String recoveryDate = scanner.nextLine();
 
-            Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+            Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
             controller.recoveryController.updateRecovery(id, updatedRecovery);
             System.out.println("Recovery updated successfully.");
         } catch (InputMismatchException e) {
@@ -304,6 +313,9 @@ public class EmployeeView {
             if (recoveries.isEmpty()) {
                 System.out.println("No recoveries available.");
             } else {
+                System.out.println("\n----------------------------------" +
+                        "\n          RECOVERY DETAILS        " +
+                        "\n----------------------------------" );
                 for (Recovery recovery : recoveries) {
                     System.out.println(recovery);
                 }

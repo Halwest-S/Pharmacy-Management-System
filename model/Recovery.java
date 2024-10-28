@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Recovery implements Serializable {
     private int recoveryID;
@@ -10,10 +11,10 @@ public class Recovery implements Serializable {
     private String userName;
     private int recoveryQuantity;
     private double recoveryTotalPrice;
-    private String recoveryDate;
+    private Date recoveryDate;
 
     //constructor
-    public Recovery(int recoveryID, String itemName, double itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, String recoveryDate) {
+    public Recovery(int recoveryID, String itemName, double itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, Date recoveryDate) {
         this.recoveryID = recoveryID;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
@@ -50,11 +51,11 @@ public class Recovery implements Serializable {
         this.recoveryTotalPrice = recoveryTotalPrice;
     }
 
-    public String getRecoveryDate() {
+    public Date getRecoveryDate() {
         return recoveryDate;
     }
 
-    public void setRecoveryDate(String recoveryDate) {
+    public void setRecoveryDate(Date recoveryDate) {
         this.recoveryDate = recoveryDate;
     }
 
@@ -84,9 +85,7 @@ public class Recovery implements Serializable {
     }
     @Override
     public String toString() {
-        return "\n----------------------------------" +
-                "\n          RECOVERY DETAILS        " +
-                "\n----------------------------------" +
+        return
                 "\nRecovery ID        : " + recoveryID +
                 "\nItem Name          : " + itemName +
                 "\nItem Price         : $" + String.format("%.2f", itemPrice) +

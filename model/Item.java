@@ -121,9 +121,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "\n==============================" +
-                "\n          ITEM DETAILS         " +
-                "\n==============================" +
+        return
                 "\nItem ID         : " + itemID +
                 "\nScientific Name : " + scientificName +
                 "\nCommon Name     : " + commonName +
