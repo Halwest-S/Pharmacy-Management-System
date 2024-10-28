@@ -26,13 +26,17 @@ public class Employee implements Serializable   {
     public void setEmployeePassword(String employeePassword) {
         this.employeePassword = employeePassword;
     }
+
     @Override
     public String toString() {
-        return "Employee ( " +
-                "employeeID: " + employeeID +
-                ", employeeName: " + employeeName +
-                ", employeePassword: " + employeePassword +
-                ')';
+        return "\n==============================" +
+                "\n        EMPLOYEE DETAILS       " +
+                "\n==============================" +
+                "\nEmployee ID   : " + employeeID +
+                "\nEmployee Name : " + employeeName +
+                "\nPassword      : " + employeePassword +
+                "\n==============================";
     }
+
 
 }

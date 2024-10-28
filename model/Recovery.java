@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Recovery implements Serializable {
     private int recoveryID;
     private String itemName;
-    private String itemPrice;
+    private double itemPrice;
 
     private String userName;
     private int recoveryQuantity;
@@ -13,7 +13,7 @@ public class Recovery implements Serializable {
     private String recoveryDate;
 
     //constructor
-    public Recovery(int recoveryID, String itemName, String itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, String recoveryDate) {
+    public Recovery(int recoveryID, String itemName, double itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, String recoveryDate) {
         this.recoveryID = recoveryID;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
@@ -75,24 +75,27 @@ public class Recovery implements Serializable {
         this.itemName = itemName;
     }
 
-    public String getItemPrice() {
+    public double getItemPrice() {
         return itemPrice;
     }
 
-    public void setItemPrice(String itemPrice) {
+    public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
     }
     @Override
     public String toString() {
-        return "Recovery ( " +
-                "recoveryID: " + recoveryID +
-                ", itemName: " + itemName +
-                ", itemPrice: " + itemPrice +
-                ", userName: " + userName +
-                ", recoveryQuantity: " + recoveryQuantity +
-                ", recoveryTotalPrice: " + recoveryTotalPrice +
-                ", recoveryDate: " + recoveryDate +
-                ')';
+        return "\n----------------------------------" +
+                "\n          RECOVERY DETAILS        " +
+                "\n----------------------------------" +
+                "\nRecovery ID        : " + recoveryID +
+                "\nItem Name          : " + itemName +
+                "\nItem Price         : $" + String.format("%.2f", itemPrice) +
+                "\nUser Name          : " + userName +
+                "\nRecovery Quantity  : " + recoveryQuantity +
+                "\nTotal Price        : $" + String.format("%.2f", recoveryTotalPrice) +
+                "\nRecovery Date      : " + recoveryDate +
+                "\n----------------------------------";
     }
+
 
 }

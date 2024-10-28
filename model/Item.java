@@ -118,21 +118,25 @@ public class Item implements Serializable {
         this.expiryDate = expiryDate;
     }
 
+
     @Override
     public String toString() {
-        return "Item ( " +
-                "itemID: " + itemID +
-                ", scientificName: " + scientificName +
-                ", commonName: " + commonName +
-                ", company: " + company +
-                ", country: " + country +
-                ", category: " + category +
-                ", importPrice: " + importPrice +
-                ", exportPrice: " + exportPrice +
-                ", quantity: " + quantity +
-                ", importDate: " + importDate +
-                ", expiryDate: " + expiryDate +
-                ')';
+        return "\n==============================" +
+                "\n          ITEM DETAILS         " +
+                "\n==============================" +
+                "\nItem ID         : " + itemID +
+                "\nScientific Name : " + scientificName +
+                "\nCommon Name     : " + commonName +
+                "\nCompany         : " + company +
+                "\nCountry         : " + country +
+                "\nCategory        : " + category +
+                "\nImport Price    : $" + String.format("%.2f", importPrice) +
+                "\nExport Price    : $" + String.format("%.2f", exportPrice) +
+                "\nQuantity        : " + quantity +
+                "\nImport Date     : " + importDate +
+                "\nExpiry Date     : " + expiryDate +
+                "\n==============================";
     }
+
 
 }

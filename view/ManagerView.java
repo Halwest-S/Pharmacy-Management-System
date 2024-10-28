@@ -11,12 +11,13 @@ import model.Recovery;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ManagerView {
-    private Scanner scanner = new Scanner(System.in);
-    private itemController itemController = new itemController();
-    private employeeController employeeController = new employeeController();
+    private final Scanner scanner = new Scanner(System.in);
+    private final itemController itemController = new itemController();
+    private final employeeController employeeController = new employeeController();
 
     public void display() {
         while (true) {
@@ -32,43 +33,44 @@ public class ManagerView {
 
             int choice = scanner.nextInt();
             scanner.nextLine();
+            try {
 
-            switch (choice) {
-                case 1:
-                    accessItemInfo();
-                    break;
-                case 2:
-                    handleSalesOrRecovery();
-                    break;
-                case 3:
-                    classifyItem();
-                    break;
-                case 4:
-                    manageItems();
-                    break;
-                case 5:
-                    manageEmployees();
-                    break;
-                case 6:
-                    generateReport();
-                    break;
-                case 7:
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+
+                switch (choice) {
+                    case 1 -> accessItemInfo();
+                    case 2 -> handleSalesOrRecovery();
+                    case 3 -> classifyItem();
+                    case 4 -> manageItems();
+                    case 5 -> manageEmployees();
+                    case 6 -> generateReport();
+                    case 7 -> {
+                        return;
+                    }
+                    default -> System.out.println("Invalid choice. Please try again.");
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the invalid input
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
             }
         }
     }
 
     private void accessItemInfo() {
+
         System.out.println("Accessing Item Info...");
-        ArrayList<Item> items = itemController.getAllItems();
-        if (items.isEmpty()) {
-            System.out.println("No items available.");
-            return;
-        }
-        for (Item item : items) {
-            System.out.println(item);
+        try {
+            ArrayList<Item> items = controller.itemController.getAllItems();
+            if (items.isEmpty()) {
+                System.out.println("No items available.");
+                return;
+            }
+            for (Item item : items) {
+                System.out.println(item); // Ensure Item class has a proper toString method
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to access item info: " + e.getMessage());
         }
     }
 
@@ -76,18 +78,18 @@ public class ManagerView {
         System.out.println("Do you want to handle a Sale or a Recovery?");
         System.out.println("1. Sale");
         System.out.println("2. Recovery");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        try {
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        switch (choice) {
-            case 1:
-                handleSales();
-                break;
-            case 2:
-                handleRecoveries();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> handleSales();
+                case 2 -> handleRecoveries();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
         }
     }
 
@@ -96,28 +98,25 @@ public class ManagerView {
         System.out.println("2. Remove Sale");
         System.out.println("3. Update Sale");
         System.out.println("4. List All Sales");
+        try {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        switch (choice) {
-            case 1:
-                addSale();
-                break;
-            case 2:
-                removeSale();
-                break;
-            case 3:
-                updateSale();
-                break;
-            case 4:
-                listSales();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> addSale();
+                case 2 -> removeSale();
+                case 3 -> updateSale();
+                case 4 -> listSales();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
         }
     }
 
     private void addSale() {
+        try {
         System.out.print("Enter Sale ID: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -138,16 +137,26 @@ public class ManagerView {
         Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
         sellController.addSell(sell);
         System.out.println("Sale added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data .");
+            scanner.nextLine(); // Clear the invalid input
+        }
     }
 
     private void removeSale() {
+        try {
         System.out.print("Enter Sale ID to remove: ");
         int id = scanner.nextInt();
         sellController.removeSell(id);
         System.out.println("Sale removed successfully (if it existed).");
-    }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
+        }
+        }
 
     private void updateSale() {
+        try {
         System.out.print("Enter Sale ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -169,9 +178,14 @@ public class ManagerView {
         Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
         sellController.updateSale(id, updatedSell);
         System.out.println("Sale updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data .");
+            scanner.nextLine(); // Clear the invalid input
+        }
     }
 
     private void listSales() {
+        try {
         ArrayList<Sell> sales = sellController.getAllSell();
         if (sales.isEmpty()) {
             System.out.println("No sales available.");
@@ -180,6 +194,9 @@ public class ManagerView {
                 System.out.println(sell);
             }
         }
+        } catch (Exception e) {
+            System.out.println("Failed to List Sales: " + e.getMessage());
+        }
     }
 
     private void handleRecoveries() {
@@ -187,41 +204,38 @@ public class ManagerView {
         System.out.println("2. Remove Recovery");
         System.out.println("3. Update Recovery");
         System.out.println("4. List All Recoveries");
+        try {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        switch (choice) {
-            case 1:
-                addRecovery();
-                break;
-            case 2:
-                removeRecovery();
-                break;
-            case 3:
-                updateRecovery();
-                break;
-            case 4:
-                listRecoveries();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> addRecovery();
+                case 2 -> removeRecovery();
+                case 3 -> updateRecovery();
+                case 4 -> listRecoveries();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
         }
     }
 
     private void addRecovery() {
+        try {
         System.out.print("Enter Recovery ID: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
         System.out.print("Enter Item Name: ");
         String itemName = scanner.nextLine();
         System.out.print("Enter Item Price: ");
-        String itemPrice = scanner.nextLine();
+        double itemPrice = scanner.nextDouble();
         System.out.print("Enter User Name: ");
         String userName = scanner.nextLine();
         System.out.print("Enter Quantity: ");
         int quantity = scanner.nextInt();
-        System.out.print("Enter Total Price: ");
-        double totalPrice = scanner.nextDouble();
+
+        double totalPrice = itemPrice*quantity;
         scanner.nextLine(); // Consume newline
         System.out.print("Enter Recovery Date: ");
         String recoveryDate = scanner.nextLine();
@@ -229,29 +243,39 @@ public class ManagerView {
         Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
         recoveryController.addRecovery(recovery);
         System.out.println("Recovery added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data .");
+            scanner.nextLine(); // Clear the invalid input
+        }
     }
 
     private void removeRecovery() {
+        try {
         System.out.print("Enter Recovery ID to remove: ");
         int id = scanner.nextInt();
         recoveryController.removeRecovery(id);
         System.out.println("Recovery removed successfully (if it existed).");
-    }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
+        }
+        }
 
     private void updateRecovery() {
+        try {
         System.out.print("Enter Recovery ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
         System.out.print("Enter new Item Name: ");
         String itemName = scanner.nextLine();
         System.out.print("Enter new Item Price: ");
-        String itemPrice = scanner.nextLine();
+        double itemPrice = scanner.nextDouble();
         System.out.print("Enter new User Name: ");
         String userName = scanner.nextLine();
         System.out.print("Enter new Quantity: ");
         int quantity = scanner.nextInt();
-        System.out.print("Enter new Total Price: ");
-        double totalPrice = scanner.nextDouble();
+
+        double totalPrice = itemPrice*quantity;
         scanner.nextLine();
         System.out.print("Enter new Recovery Date: ");
         String recoveryDate = scanner.nextLine();
@@ -259,9 +283,14 @@ public class ManagerView {
         Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
         recoveryController.updateRecovery(id, updatedRecovery);
         System.out.println("Recovery updated successfully.");
-    }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data .");
+            scanner.nextLine(); // Clear the invalid input
+        }
+        }
 
     private void listRecoveries() {
+       try {
         ArrayList<Recovery> recoveries = recoveryController.getAllRecoveries();
         if (recoveries.isEmpty()) {
             System.out.println("No recoveries available.");
@@ -270,6 +299,9 @@ public class ManagerView {
                 System.out.println(recovery);
             }
         }
+       } catch (Exception e) {
+           System.out.println("Failed to List Recoveries: " + e.getMessage());
+       }
     }
 
     private void classifyItem() {
@@ -286,32 +318,31 @@ public class ManagerView {
             System.out.println("4. List Items");
             System.out.println("5. Back to Manager Menu");
             System.out.print("Enter your choice: ");
-
+        try {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    addItem();
-                    break;
-                case 2:
-                    removeItem();
-                    break;
-                case 3:
-                    updateItem();
-                    break;
-                case 4:
-                    listItems();
-                    break;
-                case 5:
+                case 1 -> addItem();
+                case 2 -> removeItem();
+                case 3 -> updateItem();
+                case 4 -> listItems();
+                case 5 -> {
                     return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
             }
+} catch (InputMismatchException e) {
+    System.out.println("Invalid input. Please enter a number.");
+    scanner.nextLine(); // Clear the invalid input
+} catch (Exception e) {
+    System.out.println("An error occurred: " + e.getMessage());
+}
         }
     }
 
     private void addItem() {
+        try {
         System.out.print("Enter Item ID: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -340,16 +371,30 @@ public class ManagerView {
         Item newItem = new Item(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
         itemController.addItem(newItem);
         System.out.println("Item added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void removeItem() {
+        try {
         System.out.print("Enter Item ID to remove: ");
         int id = scanner.nextInt();
         itemController.removeItem(id);
         System.out.println("Item removed successfully (if it existed).");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void updateItem() {
+        try {
         System.out.print("Enter Item ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -377,16 +422,26 @@ public class ManagerView {
 
         itemController.updateItem(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
         System.out.println("Item updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data .");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void listItems() {
-        ArrayList<Item> items = itemController.getAllItems();
-        if (items.isEmpty()) {
-            System.out.println("No items available.");
-            return;
-        }
-        for (Item item : items) {
-            System.out.println(item);
+        try {
+            ArrayList<Item> items = controller.itemController.getAllItems();
+            if (items.isEmpty()) {
+                System.out.println("No items available.");
+            } else {
+                for (Item item : items) {
+                    System.out.println(item);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while listing items: " + e.getMessage());
         }
     }
 
@@ -399,32 +454,31 @@ public class ManagerView {
             System.out.println("4. List Employees");
             System.out.println("5. Back to Manager Menu");
             System.out.print("Enter your choice: ");
-
+        try {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    addEmployee();
-                    break;
-                case 2:
-                    removeEmployee();
-                    break;
-                case 3:
-                    updateEmployee();
-                    break;
-                case 4:
-                    listEmployees();
-                    break;
-                case 5:
+                case 1 -> addEmployee();
+                case 2 -> removeEmployee();
+                case 3 -> updateEmployee();
+                case 4 -> listEmployees();
+                case 5 -> {
                     return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
             }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
         }
     }
 
     private void addEmployee() {
+        try {
         System.out.print("Enter Employee ID: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -436,16 +490,30 @@ public class ManagerView {
         Employee newEmployee = new Employee(id, name, password);
         employeeController.addEmployee(newEmployee);
         System.out.println("Employee added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void removeEmployee() {
+        try {
         System.out.print("Enter Employee ID to remove: ");
         int id = scanner.nextInt();
         employeeController.removeEmployee(id);
         System.out.println("Employee removed successfully (if it existed).");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void updateEmployee() {
+        try {
         System.out.print("Enter Employee ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -456,9 +524,16 @@ public class ManagerView {
 
         employeeController.updateEmployee(id, name, password);
         System.out.println("Employee updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter the correct data type.");
+            scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
     }
 
     private void listEmployees() {
+        try {
         ArrayList<Employee> employees = employeeController.getAllEmployees();
         if (employees.isEmpty()) {
             System.out.println("No employees available.");
@@ -466,6 +541,9 @@ public class ManagerView {
         }
         for (Employee employee : employees) {
             System.out.println(employee);
+        }
+        } catch (Exception e) {
+            System.out.println("An error occurred while listing employees: " + e.getMessage());
         }
     }
 

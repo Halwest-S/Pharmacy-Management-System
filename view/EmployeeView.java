@@ -9,258 +9,314 @@ import model.Sell;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class EmployeeView {
-    private Scanner scanner = new Scanner(System.in);
-    private itemController itemController = new itemController();
+    private final Scanner scanner = new Scanner(System.in);
+    private final itemController itemController = new itemController();
+    private final sellController sellController = new sellController();
+    private final recoveryController recoveryController = new recoveryController();
 
     public void display() {
         while (true) {
-            System.out.println("\nEmployee Menu");
-            System.out.println("1. Access Item Info");
-            System.out.println("2. Handle Sales Or recovery");
-            System.out.println("3. Classify Item");
-            System.out.println("4. Logout");
-            System.out.print("Enter your choice: ");
+            try {
+                System.out.println("\nEmployee Menu");
+                System.out.println("1. Access Item Info");
+                System.out.println("2. Handle Sales or Recovery");
+                System.out.println("3. Classify Item");
+                System.out.println("4. Logout");
+                System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    accessItemInfo();
-                    break;
-                case 2:
-                    handleSalesOrRecovery();
-                    break;
-                case 3:
-                    classifyItem();
-                    break;
-                case 4:
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                switch (choice) {
+                    case 1 -> accessItemInfo();
+                    case 2 -> handleSalesOrRecovery();
+                    case 3 -> classifyItem();
+                    case 4 -> {
+                        return;
+                    }
+                    default -> System.out.println("Invalid choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear invalid input
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
             }
         }
     }
 
-    // Access item info logic
     private void accessItemInfo() {
+
         System.out.println("Accessing Item Info...");
-        ArrayList<Item> items = itemController.getAllItems();
-        if (items.isEmpty()) {
-            System.out.println("No items available.");
-            return;
-        }
-        for (Item item : items) {
-            System.out.println(item); // Ensure Item class has a proper toString method
+        try {
+            ArrayList<Item> items = controller.itemController.getAllItems();
+            if (items.isEmpty()) {
+                System.out.println("No items available.");
+                return;
+            }
+            for (Item item : items) {
+                System.out.println(item); // Ensure Item class has a proper toString method
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to access item info: " + e.getMessage());
         }
     }
 
     private void handleSalesOrRecovery() {
-        System.out.println("Do you want to handle a Sale or a Recovery?");
-        System.out.println("1. Sale");
-        System.out.println("2. Recovery");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        try {
+            System.out.println("Do you want to handle a Sale or a Recovery?");
+            System.out.println("1. Sale");
+            System.out.println("2. Recovery");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        switch (choice) {
-            case 1:
-                handleSales();
-                break;
-            case 2:
-                handleRecoveries();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> handleSales();
+                case 2 -> handleRecoveries();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
     private void handleSales() {
-        System.out.println("1. Add Sale");
-        System.out.println("2. Remove Sale");
-        System.out.println("3. Update Sale");
-        System.out.println("4. List All Sales");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        try {
+            System.out.println("1. Add Sale");
+            System.out.println("2. Remove Sale");
+            System.out.println("3. Update Sale");
+            System.out.println("4. List All Sales");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        switch (choice) {
-            case 1:
-                addSale();
-                break;
-            case 2:
-                removeSale();
-                break;
-            case 3:
-                updateSale();
-                break;
-            case 4:
-                listSales();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> addSale();
+                case 2 -> removeSale();
+                case 3 -> updateSale();
+                case 4 -> listSales();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
     private void addSale() {
-        System.out.print("Enter Sale ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter Item Price: ");
-        double itemPrice = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter Quantity: ");
-        int quantity = scanner.nextInt();
-        double totalPrice = itemPrice*quantity;
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Sale Date: ");
-        String sellDate = scanner.nextLine();
+        try {
+            System.out.print("Enter Sale ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter Quantity: ");
+            int quantity = scanner.nextInt();
+            double totalPrice = itemPrice * quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Sale Date: ");
+            String sellDate = scanner.nextLine();
 
-        Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        sellController.addSell(sell);
-        System.out.println("Sale added successfully.");
+            Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            controller.sellController.addSell(sell);
+            System.out.println("Sale added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid values.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to add sale: " + e.getMessage());
+        }
     }
 
     private void removeSale() {
-        System.out.print("Enter Sale ID to remove: ");
-        int id = scanner.nextInt();
-        sellController.removeSell(id);
-        System.out.println("Sale removed successfully (if it existed).");
+        try {
+            System.out.print("Enter Sale ID to remove: ");
+            int id = scanner.nextInt();
+            controller.sellController.removeSell(id);
+            System.out.println("Sale removed successfully (if it existed).");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid ID.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to remove sale: " + e.getMessage());
+        }
     }
 
     private void updateSale() {
-        System.out.print("Enter Sale ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Enter new Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter new Item Price: ");
-        double itemPrice = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.print("Enter new User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter new Quantity: ");
-        int quantity = scanner.nextInt();
+        try {
+            System.out.print("Enter Sale ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Enter new Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter new Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            scanner.nextLine();
+            System.out.print("Enter new User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter new Quantity: ");
+            int quantity = scanner.nextInt();
 
-        double totalPrice = itemPrice*quantity;
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Sale Date: ");
-        String sellDate = scanner.nextLine();
+            double totalPrice = itemPrice * quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Sale Date: ");
+            String sellDate = scanner.nextLine();
 
-        Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        sellController.updateSale(id, updatedSell);
-        System.out.println("Sale updated successfully.");
+            Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            controller.sellController.updateSale(id, updatedSell);
+            System.out.println("Sale updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid values.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to update sale: " + e.getMessage());
+        }
     }
 
     private void listSales() {
-        ArrayList<Sell> sales = sellController.getAllSell();
-        if (sales.isEmpty()) {
-            System.out.println("No sales available.");
-        } else {
-            for (Sell sell : sales) {
-                System.out.println(sell);
+        try {
+            ArrayList<Sell> sales = controller.sellController.getAllSell();
+            if (sales.isEmpty()) {
+                System.out.println("No sales available.");
+            } else {
+                for (Sell sell : sales) {
+                    System.out.println(sell);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Failed to list sales: " + e.getMessage());
         }
     }
 
     private void handleRecoveries() {
-        System.out.println("1. Add Recovery");
-        System.out.println("2. Remove Recovery");
-        System.out.println("3. Update Recovery");
-        System.out.println("4. List All Recoveries");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            System.out.println("1. Add Recovery");
+            System.out.println("2. Remove Recovery");
+            System.out.println("3. Update Recovery");
+            System.out.println("4. List All Recoveries");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (choice) {
-            case 1:
-                addRecovery();
-                break;
-            case 2:
-                removeRecovery();
-                break;
-            case 3:
-                updateRecovery();
-                break;
-            case 4:
-                listRecoveries();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> addRecovery();
+                case 2 -> removeRecovery();
+                case 3 -> updateRecovery();
+                case 4 -> listRecoveries();
+                default -> System.out.println("Invalid choice.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
     private void addRecovery() {
-        System.out.print("Enter Recovery ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter Item Price: ");
-        String itemPrice = scanner.nextLine();
-        System.out.print("Enter User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter Quantity: ");
-        int quantity = scanner.nextInt();
-        System.out.print("Enter Total Price: ");
-        double totalPrice = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Recovery Date: ");
-        String recoveryDate = scanner.nextLine();
+        try {
+            System.out.print("Enter Recovery ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            System.out.print("Enter User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter Quantity: ");
+            int quantity = scanner.nextInt();
 
-        Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
-        recoveryController.addRecovery(recovery);
-        System.out.println("Recovery added successfully.");
+            double totalPrice = itemPrice*quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Recovery Date: ");
+            String recoveryDate = scanner.nextLine();
+
+            Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+            controller.recoveryController.addRecovery(recovery);
+            System.out.println("Recovery added successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid values.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to add recovery: " + e.getMessage());
+        }
     }
-
     private void removeRecovery() {
-        System.out.print("Enter Recovery ID to remove: ");
-        int id = scanner.nextInt();
-        recoveryController.removeRecovery(id);
-        System.out.println("Recovery removed successfully (if it existed).");
-    }
-
-    private void updateRecovery() {
-        System.out.print("Enter Recovery ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter new Item Price: ");
-        String itemPrice = scanner.nextLine();
-        System.out.print("Enter new User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter new Quantity: ");
-        int quantity = scanner.nextInt();
-        System.out.print("Enter new Total Price: ");
-        double totalPrice = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.print("Enter new Recovery Date: ");
-        String recoveryDate = scanner.nextLine();
-
-        Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
-        recoveryController.updateRecovery(id, updatedRecovery);
-        System.out.println("Recovery updated successfully.");
-    }
-
-    private void listRecoveries() {
-        ArrayList<Recovery> recoveries = recoveryController.getAllRecoveries();
-        if (recoveries.isEmpty()) {
-            System.out.println("No recoveries available.");
-        } else {
-            for (Recovery recovery : recoveries) {
-                System.out.println(recovery);
-            }
+        try {
+            System.out.print("Enter Recovery ID to remove: ");
+            int id = scanner.nextInt();
+            controller.recoveryController.removeRecovery(id);
+            System.out.println("Recovery removed successfully (if it existed).");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid ID.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to remove recovery: " + e.getMessage());
         }
     }
 
+    private void updateRecovery() {
+        try {
+            System.out.print("Enter Recovery ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter new Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            System.out.print("Enter new User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter new Quantity: ");
+            int quantity = scanner.nextInt();
+
+            double totalPrice = itemPrice*quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Recovery Date: ");
+            String recoveryDate = scanner.nextLine();
+
+            Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, recoveryDate);
+            controller.recoveryController.updateRecovery(id, updatedRecovery);
+            System.out.println("Recovery updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid values.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("Failed to update recovery: " + e.getMessage());
+        }
+    }
+
+    private void listRecoveries() {
+        try {
+            ArrayList<Recovery> recoveries = controller.recoveryController.getAllRecoveries();
+            if (recoveries.isEmpty()) {
+                System.out.println("No recoveries available.");
+            } else {
+                for (Recovery recovery : recoveries) {
+                    System.out.println(recovery);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to list recoveries: " + e.getMessage());
+        }
+    }
 
     private void classifyItem() {
         System.out.println("Classifying Item...");
         // Implement item classification logic
+        // You might want to add exception handling here based on the implementation.
     }
 }
+
