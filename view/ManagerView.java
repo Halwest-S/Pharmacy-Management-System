@@ -107,8 +107,8 @@ public class ManagerView {
         System.out.println("3. Update Sale");
         System.out.println("4. List All Sales");
         try {
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> addSale();
@@ -125,24 +125,24 @@ public class ManagerView {
 
     private void addSale() {
         try {
-        System.out.print("Enter Sale ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter Item Price: ");
-        double itemPrice = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter Quantity: ");
-        int quantity = scanner.nextInt();
-        double totalPrice = itemPrice*quantity;
+            System.out.print("Enter Sale ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter Quantity: ");
+            int quantity = scanner.nextInt();
+            double totalPrice = itemPrice*quantity;
 
 
-        Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        sellController.addSell(sell);
-        System.out.println("Sale added successfully.");
+            Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            sellController.addSell(sell);
+            System.out.println("Sale added successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data .");
             scanner.nextLine(); // Clear the invalid input
@@ -151,39 +151,39 @@ public class ManagerView {
 
     private void removeSale() {
         try {
-        System.out.print("Enter Sale ID to remove: ");
-        int id = scanner.nextInt();
-        sellController.removeSell(id);
-        System.out.println("Sale removed successfully (if it existed).");
+            System.out.print("Enter Sale ID to remove: ");
+            int id = scanner.nextInt();
+            sellController.removeSell(id);
+            System.out.println("Sale removed successfully (if it existed).");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
         }
-        }
+    }
 
     private void updateSale() {
         try {
-        System.out.print("Enter Sale ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Enter new Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter new Item Price: ");
-        double itemPrice = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.print("Enter new User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter new Quantity: ");
-        int quantity = scanner.nextInt();
+            System.out.print("Enter Sale ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Enter new Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter new Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            scanner.nextLine();
+            System.out.print("Enter new User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter new Quantity: ");
+            int quantity = scanner.nextInt();
 
-        double totalPrice = itemPrice*quantity;
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Sale Date: ");
-        String sellDate = scanner.nextLine();
+            double totalPrice = itemPrice*quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Sale Date: ");
+            String sellDate = scanner.nextLine();
 
-        Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        sellController.updateSale(id, updatedSell);
-        System.out.println("Sale updated successfully.");
+            Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            sellController.updateSale(id, updatedSell);
+            System.out.println("Sale updated successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data .");
             scanner.nextLine(); // Clear the invalid input
@@ -192,17 +192,17 @@ public class ManagerView {
 
     private void listSales() {
         try {
-        ArrayList<Sell> sales = sellController.getAllSell();
-        if (sales.isEmpty()) {
-            System.out.println("No sales available.");
-        } else {
-            System.out.println("\n**********************************" +
-                    "\n           SELL DETAILS           " +
-                    "\n**********************************" );
-            for (Sell sell : sales) {
-                System.out.println(sell);
+            ArrayList<Sell> sales = sellController.getAllSell();
+            if (sales.isEmpty()) {
+                System.out.println("No sales available.");
+            } else {
+                System.out.println("\n**********************************" +
+                        "\n           SELL DETAILS           " +
+                        "\n**********************************" );
+                for (Sell sell : sales) {
+                    System.out.println(sell);
+                }
             }
-        }
         } catch (Exception e) {
             System.out.println("Failed to List Sales: " + e.getMessage());
         }
@@ -214,8 +214,8 @@ public class ManagerView {
         System.out.println("3. Update Recovery");
         System.out.println("4. List All Recoveries");
         try {
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> addRecovery();
@@ -232,27 +232,27 @@ public class ManagerView {
 
     private void addRecovery() {
         try {
-        System.out.print("Enter Recovery ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter Item Price: ");
-        double itemPrice = scanner.nextDouble();
+            System.out.print("Enter Recovery ID: ");
+            int id = scanner.nextInt();
             scanner.nextLine(); // Consume newline
-        System.out.print("Enter User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter Quantity: ");
-        int quantity = scanner.nextInt();
+            System.out.print("Enter Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter Quantity: ");
+            int quantity = scanner.nextInt();
 
-        double totalPrice = itemPrice*quantity;
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Recovery Date: ");
-        String recoveryDate = scanner.nextLine();
+            double totalPrice = itemPrice*quantity;
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Recovery Date: ");
+            String recoveryDate = scanner.nextLine();
 
-        Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        recoveryController.addRecovery(recovery);
-        System.out.println("Recovery added successfully.");
+            Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            recoveryController.addRecovery(recovery);
+            System.out.println("Recovery added successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data .");
             scanner.nextLine(); // Clear the invalid input
@@ -261,60 +261,60 @@ public class ManagerView {
 
     private void removeRecovery() {
         try {
-        System.out.print("Enter Recovery ID to remove: ");
-        int id = scanner.nextInt();
-        recoveryController.removeRecovery(id);
-        System.out.println("Recovery removed successfully (if it existed).");
+            System.out.print("Enter Recovery ID to remove: ");
+            int id = scanner.nextInt();
+            recoveryController.removeRecovery(id);
+            System.out.println("Recovery removed successfully (if it existed).");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
         }
-        }
+    }
 
     private void updateRecovery() {
         try {
-        System.out.print("Enter Recovery ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Item Name: ");
-        String itemName = scanner.nextLine();
-        System.out.print("Enter new Item Price: ");
-        double itemPrice = scanner.nextDouble();
-        System.out.print("Enter new User Name: ");
-        String userName = scanner.nextLine();
-        System.out.print("Enter new Quantity: ");
-        int quantity = scanner.nextInt();
+            System.out.print("Enter Recovery ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Item Name: ");
+            String itemName = scanner.nextLine();
+            System.out.print("Enter new Item Price: ");
+            double itemPrice = scanner.nextDouble();
+            System.out.print("Enter new User Name: ");
+            String userName = scanner.nextLine();
+            System.out.print("Enter new Quantity: ");
+            int quantity = scanner.nextInt();
 
-        double totalPrice = itemPrice*quantity;
-        scanner.nextLine();
-        System.out.print("Enter new Recovery Date: ");
-        String recoveryDate = scanner.nextLine();
+            double totalPrice = itemPrice*quantity;
+            scanner.nextLine();
+            System.out.print("Enter new Recovery Date: ");
+            String recoveryDate = scanner.nextLine();
 
-        Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-        recoveryController.updateRecovery(id, updatedRecovery);
-        System.out.println("Recovery updated successfully.");
+            Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
+            recoveryController.updateRecovery(id, updatedRecovery);
+            System.out.println("Recovery updated successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data .");
             scanner.nextLine(); // Clear the invalid input
         }
-        }
+    }
 
     private void listRecoveries() {
-       try {
-        ArrayList<Recovery> recoveries = recoveryController.getAllRecoveries();
-        if (recoveries.isEmpty()) {
-            System.out.println("No recoveries available.");
-        } else {
-            System.out.println("\n----------------------------------" +
-                    "\n          RECOVERY DETAILS        " +
-                    "\n----------------------------------" );
-            for (Recovery recovery : recoveries) {
-                System.out.println(recovery);
+        try {
+            ArrayList<Recovery> recoveries = recoveryController.getAllRecoveries();
+            if (recoveries.isEmpty()) {
+                System.out.println("No recoveries available.");
+            } else {
+                System.out.println("\n----------------------------------" +
+                        "\n          RECOVERY DETAILS        " +
+                        "\n----------------------------------" );
+                for (Recovery recovery : recoveries) {
+                    System.out.println(recovery);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Failed to List Recoveries: " + e.getMessage());
         }
-       } catch (Exception e) {
-           System.out.println("Failed to List Recoveries: " + e.getMessage());
-       }
     }
 
     private void classifyItem() {
@@ -331,57 +331,57 @@ public class ManagerView {
             System.out.println("4. List Items");
             System.out.println("5. Back to Manager Menu");
             System.out.print("Enter your choice: ");
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1 -> addItem();
-                case 2 -> removeItem();
-                case 3 -> updateItem();
-                case 4 -> listItems();
-                case 5 -> {
-                    return;
+                switch (choice) {
+                    case 1 -> addItem();
+                    case 2 -> removeItem();
+                    case 3 -> updateItem();
+                    case 4 -> listItems();
+                    case 5 -> {
+                        return;
+                    }
+                    default -> System.out.println("Invalid choice. Please try again.");
                 }
-                default -> System.out.println("Invalid choice. Please try again.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the invalid input
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
             }
-} catch (InputMismatchException e) {
-    System.out.println("Invalid input. Please enter a number.");
-    scanner.nextLine(); // Clear the invalid input
-} catch (Exception e) {
-    System.out.println("An error occurred: " + e.getMessage());
-}
         }
     }
 
     private void addItem() {
         try {
-        System.out.print("Enter Item ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Enter Scientific Name: ");
-        String scientificName = scanner.nextLine();
-        System.out.print("Enter Common Name: ");
-        String commonName = scanner.nextLine();
-        System.out.print("Enter Company: ");
-        String company = scanner.nextLine();
-        System.out.print("Enter Country: ");
-        String country = scanner.nextLine();
-        System.out.print("Enter Category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter Import Price: ");
-        double importPrice = scanner.nextDouble();
-        System.out.print("Enter Export Price: ");
-        double exportPrice = scanner.nextDouble();
-        System.out.print("Enter Quantity: ");
-        int quantity = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Import Date: ");
-        String importDate = scanner.nextLine();
-        System.out.print("Enter Expiry Date: ");
-        String expiryDate = scanner.nextLine();
+            System.out.print("Enter Item ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Enter Scientific Name: ");
+            String scientificName = scanner.nextLine();
+            System.out.print("Enter Common Name: ");
+            String commonName = scanner.nextLine();
+            System.out.print("Enter Company: ");
+            String company = scanner.nextLine();
+            System.out.print("Enter Country: ");
+            String country = scanner.nextLine();
+            System.out.print("Enter Category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter Import Price: ");
+            double importPrice = scanner.nextDouble();
+            System.out.print("Enter Export Price: ");
+            double exportPrice = scanner.nextDouble();
+            System.out.print("Enter Quantity: ");
+            int quantity = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Import Date: ");
+            String importDate = scanner.nextLine();
+            System.out.print("Enter Expiry Date: ");
+            String expiryDate = scanner.nextLine();
 
-        Item newItem = new Item(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
+            Item newItem = new Item(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
             // Send to server only
             String response = Client.addItem(newItem);
             System.out.println(response != null ? response : "Failed to add item.");
@@ -389,19 +389,19 @@ public class ManagerView {
             System.out.println("Invalid input. Please enter the correct data.");
             scanner.nextLine();
         } catch (Exception e) {
-           // System.out.println("An error occurred: " + e.getMessage());
+            // System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
     private void removeItem() {
         try {
-        System.out.print("Enter Item ID to remove: ");
-        int id = scanner.nextInt();
-        itemController.removeItem(id);
-        System.out.println("Item removed successfully (if it existed).");
+            System.out.print("Enter Item ID to remove: ");
+            int id = scanner.nextInt();
+            String response = Client.removeItem(id);  // Use Client to send request to server
+            System.out.println(response != null ? response : "Failed to remove item.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
-            scanner.nextLine(); // Clear the invalid input
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
@@ -409,36 +409,37 @@ public class ManagerView {
 
     private void updateItem() {
         try {
-        System.out.print("Enter Item ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Scientific Name: ");
-        String scientificName = scanner.nextLine();
-        System.out.print("Enter new Common Name: ");
-        String commonName = scanner.nextLine();
-        System.out.print("Enter new Company: ");
-        String company = scanner.nextLine();
-        System.out.print("Enter new Country: ");
-        String country = scanner.nextLine();
-        System.out.print("Enter new Category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter new Import Price: ");
-        double importPrice = scanner.nextDouble();
-        System.out.print("Enter new Export Price: ");
-        double exportPrice = scanner.nextDouble();
-        System.out.print("Enter new Quantity: ");
-        int quantity = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Import Date: ");
-        String importDate = scanner.nextLine();
-        System.out.print("Enter new Expiry Date: ");
-        String expiryDate = scanner.nextLine();
+            System.out.print("Enter Item ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Scientific Name: ");
+            String scientificName = scanner.nextLine();
+            System.out.print("Enter new Common Name: ");
+            String commonName = scanner.nextLine();
+            System.out.print("Enter new Company: ");
+            String company = scanner.nextLine();
+            System.out.print("Enter new Country: ");
+            String country = scanner.nextLine();
+            System.out.print("Enter new Category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter new Import Price: ");
+            double importPrice = scanner.nextDouble();
+            System.out.print("Enter new Export Price: ");
+            double exportPrice = scanner.nextDouble();
+            System.out.print("Enter new Quantity: ");
+            int quantity = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Import Date: ");
+            String importDate = scanner.nextLine();
+            System.out.print("Enter new Expiry Date: ");
+            String expiryDate = scanner.nextLine();
 
-        itemController.updateItem(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
-        System.out.println("Item updated successfully.");
+            Item updatedItem = new Item(id, scientificName, commonName, company, country, category, importPrice, exportPrice, quantity, importDate, expiryDate);
+            String response = Client.updateItem(updatedItem);  // Use Client for server request
+            System.out.println(response != null ? response : "Failed to update item.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter the correct data .");
-            scanner.nextLine(); // Clear the invalid input
+            System.out.println("Invalid input. Please enter the correct data.");
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
@@ -450,7 +451,7 @@ public class ManagerView {
 
             if (items == null || items.isEmpty()) {
                 System.out.println("No items available.");
-<<<<<<< HEAD
+
             } else {
                 System.out.println("\n==============================" +
                         "\n          ITEM DETAILS         " +
@@ -458,12 +459,11 @@ public class ManagerView {
                 for (Item item : items) {
                     System.out.println(item);
                 }
-=======
->>>>>>> temp_branch
+
             }
-                for (Item item : items) {
-                    System.out.println(item);  // Display each item
-                }
+            for (Item item : items) {
+                System.out.println(item);  // Display each item
+            }
 
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while listing items: " + e);  // More informative message
@@ -482,43 +482,43 @@ public class ManagerView {
             System.out.println("4. List Employees");
             System.out.println("5. Back to Manager Menu");
             System.out.print("Enter your choice: ");
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1 -> addEmployee();
-                case 2 -> removeEmployee();
-                case 3 -> updateEmployee();
-                case 4 -> listEmployees();
-                case 5 -> {
-                    return;
+                switch (choice) {
+                    case 1 -> addEmployee();
+                    case 2 -> removeEmployee();
+                    case 3 -> updateEmployee();
+                    case 4 -> listEmployees();
+                    case 5 -> {
+                        return;
+                    }
+                    default -> System.out.println("Invalid choice. Please try again.");
                 }
-                default -> System.out.println("Invalid choice. Please try again.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the invalid input
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a number.");
-            scanner.nextLine(); // Clear the invalid input
-        } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage());
-        }
         }
     }
 
     private void addEmployee() {
         try {
-        System.out.print("Enter Employee ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter Employee Name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter Employee Password: ");
-        String password = scanner.nextLine();
+            System.out.print("Enter Employee ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Employee Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter Employee Password: ");
+            String password = scanner.nextLine();
 
 
-        Employee newEmployee = new Employee(id, name, password);
-        employeeController.addEmployee(newEmployee);
-        System.out.println("Employee added successfully.");
+            Employee newEmployee = new Employee(id, name, password);
+            employeeController.addEmployee(newEmployee);
+            System.out.println("Employee added successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data.");
             scanner.nextLine(); // Clear the invalid input
@@ -529,10 +529,10 @@ public class ManagerView {
 
     private void removeEmployee() {
         try {
-        System.out.print("Enter Employee ID to remove: ");
-        int id = scanner.nextInt();
-        employeeController.removeEmployee(id);
-        System.out.println("Employee removed successfully (if it existed).");
+            System.out.print("Enter Employee ID to remove: ");
+            int id = scanner.nextInt();
+            employeeController.removeEmployee(id);
+            System.out.println("Employee removed successfully (if it existed).");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
@@ -543,16 +543,16 @@ public class ManagerView {
 
     private void updateEmployee() {
         try {
-        System.out.print("Enter Employee ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter new Employee Name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter new Employee Password: ");
-        String password = scanner.nextLine();
+            System.out.print("Enter Employee ID to update: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter new Employee Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter new Employee Password: ");
+            String password = scanner.nextLine();
 
-        employeeController.updateEmployee(id, name, password);
-        System.out.println("Employee updated successfully.");
+            employeeController.updateEmployee(id, name, password);
+            System.out.println("Employee updated successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data type.");
             scanner.nextLine(); // Clear the invalid input
@@ -563,17 +563,17 @@ public class ManagerView {
 
     private void listEmployees() {
         try {
-        ArrayList<Employee> employees = employeeController.getAllEmployees();
-        if (employees.isEmpty()) {
-            System.out.println("No employees available.");
-            return;
-        }else {
-            System.out.println("\n==============================" +
-                    "\n        EMPLOYEE DETAILS       " +
-                    "\n==============================" );
-        for (Employee employee : employees) {
-            System.out.println(employee);
-        }}
+            ArrayList<Employee> employees = employeeController.getAllEmployees();
+            if (employees.isEmpty()) {
+                System.out.println("No employees available.");
+                return;
+            }else {
+                System.out.println("\n==============================" +
+                        "\n        EMPLOYEE DETAILS       " +
+                        "\n==============================" );
+                for (Employee employee : employees) {
+                    System.out.println(employee);
+                }}
         } catch (Exception e) {
             System.out.println("An error occurred while listing employees: " + e.getMessage());
         }

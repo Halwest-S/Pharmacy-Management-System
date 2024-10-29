@@ -17,7 +17,7 @@ public class ThreadController extends Thread {
 
     public ThreadController(Socket socket) {
         this.socket = socket;
-        this.itemController = new itemController(); // Initialize item controller
+        this.itemController = new itemController();
     }
 
     public void run() {
@@ -27,40 +27,42 @@ public class ThreadController extends Thread {
             inStream = new ObjectInputStream(socket.getInputStream());
 
             while (true) {
-                String command = (String) inStream.readObject(); // Read the command
-                System.out.println("Received command: " + command); // Debug
+                String command = (String) inStream.readObject();
+                System.out.println("Received command: " + command);
 
                 switch (command) {
                     case "addItem":
-                        Item item = (Item) inStream.readObject(); // Receive the item object from the client
-                        System.out.println("Received item to add: " + item); // Debug
-                        itemController.addItem(item);  // Add the item using itemController
-                        outStream.writeObject("Item added successfully."); // Send acknowledgment to the client
-                        System.out.println("Item added and response sent to client."); // Debug
+                        Item item = (Item) inStream.readObject();
+                        System.out.println("Received item to add: " + item);
+                        itemController.addItem(item);
+                        outStream.writeObject("Item added successfully.");
+                        System.out.println("Item added and response sent to client.");
                         break;
 
 
                     case "removeItem":
+                        System.out.println("Processing 'removeItem' command...");
                         int removeId = (int) inStream.readObject();
-                        System.out.println("Received ID to remove: " + removeId); // Debug
-                        itemController.removeItem(removeId); // Use itemController to remove item
+                        System.out.println("Received ID to remove: " + removeId);
+                        itemController.removeItem(removeId);
                         outStream.writeObject("Item removed successfully (if it existed).");
-                        System.out.println("Item removed and response sent."); // Debug
+                        System.out.println("Item removed and response sent.");
                         break;
+
 
                     case "getItemById":
                         int id = (int) inStream.readObject();
-                        System.out.println("Received ID to retrieve: " + id); // Debug
-                        Item foundItem = itemController.getItemById(id); // Use itemController to get item by ID
-                        outStream.writeObject(foundItem); // Send item back to client
-                        System.out.println("Item retrieved and response sent."); // Debug
+                        System.out.println("Received ID to retrieve: " + id);
+                        Item foundItem = itemController.getItemById(id);
+                        outStream.writeObject(foundItem);
+                        System.out.println("Item retrieved and response sent.");
                         break;
 
                     case "getAllItems":
-                        System.out.println("Processing getAllItems request"); // Debug
-                        ArrayList<Item> items = itemController.getAllItems(); // Fetch items from itemController
-                        System.out.println("Returning items list to client: " + items); // Debug
-                        outStream.writeObject(items);  // Send items list back to client
+                        System.out.println("Processing getAllItems request");
+                        ArrayList<Item> items = itemController.getAllItems();
+                        System.out.println("Returning items list to client: " + items);
+                        outStream.writeObject(items);
                         break;
 
 
@@ -68,7 +70,7 @@ public class ThreadController extends Thread {
 
                     case "updateItem":
                         Item updatedItem = (Item) inStream.readObject();
-                        System.out.println("Received item to update: " + updatedItem); // Debug
+                        System.out.println("Received item to update: " + updatedItem);
                         itemController.updateItem(
                                 updatedItem.getItemID(),
                                 updatedItem.getScientificName(),
@@ -83,7 +85,7 @@ public class ThreadController extends Thread {
                                 updatedItem.getExpiryDate()
                         ); // Use itemController to update item
                         outStream.writeObject("Item updated successfully.");
-                        System.out.println("Item updated and response sent."); // Debug
+                        System.out.println("Item updated and response sent.");
                         break;
 
                     default:
