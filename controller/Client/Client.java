@@ -1,5 +1,6 @@
 package controller.Client;
 
+import model.Employee;
 import model.Item;
 
 import java.io.IOException;
@@ -35,10 +36,10 @@ public class Client {
         }
     }
     public static String addItem(Item item) throws IOException, ClassNotFoundException {
-        System.out.println("Sending 'addItem' command to server..."); // Debug
-        objOut.writeObject("addItem");  // Send command
-        objOut.writeObject(item);       // Send item object
-        System.out.println("Waiting for response from server..."); // Debug
+        System.out.println("Sending 'addItem' command to server...");
+        objOut.writeObject("addItem");
+        objOut.writeObject(item);
+        System.out.println("Waiting for response from server...");
 
         // Read response from server
         String response = (String) objIn.readObject();
@@ -64,17 +65,61 @@ public class Client {
         System.out.println("Requesting all items from server..."); // Debug
         objOut.writeObject("getAllItems"); // Send command to server
 
-        // Expecting to receive an ArrayList<Item> response from the server
+
         ArrayList<Item> items = (ArrayList<Item>) objIn.readObject();
         System.out.println("Received items list from server: " + items); // Debug
         return items;
     }
-
-
-
     public static String updateItem(Item item) throws IOException, ClassNotFoundException {
         objOut.writeObject("updateItem");
         objOut.writeObject(item);
         return (String) objIn.readObject();
     }
+
+    public static String addEmployee(Employee employee) throws IOException, ClassNotFoundException {
+        try {
+            System.out.println("Sending 'addEmployee' command to server...");
+            objOut.writeObject("addEmployee");
+            objOut.writeObject(employee);
+            System.out.println("Waiting for response from server...");
+
+            String response = (String) objIn.readObject();
+            System.out.println("Received response: " + response);
+
+            return response;
+        } catch (IOException e) {
+            System.err.println("Error during addEmployee: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
+    public static String removeEmployee(int id) throws IOException, ClassNotFoundException {
+        objOut.writeObject("removeEmployee");
+        objOut.writeObject(id);
+        return (String) objIn.readObject();
+    }
+
+    public Employee getEmployeeById(int id) throws IOException, ClassNotFoundException {
+        objOut.writeObject("getEmployeeById");
+        objOut.writeObject(id);
+        return (Employee) objIn.readObject();
+    }
+
+    public static ArrayList<Employee> getAllEmployees() throws IOException, ClassNotFoundException {
+        System.out.println("Requesting all employees from server...");
+        objOut.writeObject("getAllEmployees"); // Send command to server
+
+
+        ArrayList<Employee> employees = (ArrayList<Employee>) objIn.readObject();
+        System.out.println("Received employee list from server: " + employees); // Debug
+        return employees;
+    }
+
+    public static String updateEmployee(Employee employee) throws IOException, ClassNotFoundException {
+        objOut.writeObject("updateEmployee");
+        objOut.writeObject(employee);
+        return (String) objIn.readObject();
+    }
+
 }

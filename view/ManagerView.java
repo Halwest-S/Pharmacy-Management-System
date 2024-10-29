@@ -447,28 +447,24 @@ public class ManagerView {
 
     private void listItems() {
         try {
-            ArrayList<Item> items = Client.getAllItems();  // Fetch items from the server
+            System.out.println("Requesting updated list from server...");
+            ArrayList<Item> items = Client.getAllItems();
 
             if (items == null || items.isEmpty()) {
                 System.out.println("No items available.");
-
             } else {
                 System.out.println("\n==============================" +
                         "\n          ITEM DETAILS         " +
-                        "\n==============================" );
+                        "\n==============================");
                 for (Item item : items) {
                     System.out.println(item);
                 }
-
             }
-            for (Item item : items) {
-                System.out.println(item);  // Display each item
-            }
-
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("An error occurred while listing items: " + e);  // More informative message
+            System.out.println("An error occurred while listing items: " + e);
         }
     }
+
 
 
 
@@ -515,10 +511,11 @@ public class ManagerView {
             System.out.print("Enter Employee Password: ");
             String password = scanner.nextLine();
 
-
             Employee newEmployee = new Employee(id, name, password);
-            employeeController.addEmployee(newEmployee);
-            System.out.println("Employee added successfully.");
+
+            // Send addEmployee request to server
+            String response = Client.addEmployee(newEmployee);
+            System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data.");
             scanner.nextLine(); // Clear the invalid input
@@ -531,8 +528,10 @@ public class ManagerView {
         try {
             System.out.print("Enter Employee ID to remove: ");
             int id = scanner.nextInt();
-            employeeController.removeEmployee(id);
-            System.out.println("Employee removed successfully (if it existed).");
+
+            // Send removeEmployee request to server
+            String response = Client.removeEmployee(id);
+            System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
@@ -551,8 +550,11 @@ public class ManagerView {
             System.out.print("Enter new Employee Password: ");
             String password = scanner.nextLine();
 
-            employeeController.updateEmployee(id, name, password);
-            System.out.println("Employee updated successfully.");
+            Employee updatedEmployee = new Employee(id, name, password);
+
+            // Send updateEmployee request to server
+            String response = Client.updateEmployee(updatedEmployee);
+            System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data type.");
             scanner.nextLine(); // Clear the invalid input
@@ -563,21 +565,24 @@ public class ManagerView {
 
     private void listEmployees() {
         try {
-            ArrayList<Employee> employees = employeeController.getAllEmployees();
+            // Request all employees from server
+            ArrayList<Employee> employees = Client.getAllEmployees();
+
             if (employees.isEmpty()) {
                 System.out.println("No employees available.");
-                return;
-            }else {
-                System.out.println("\n==============================" +
-                        "\n        EMPLOYEE DETAILS       " +
-                        "\n==============================" );
+            } else {
+                System.out.println("\n===============================" +
+                        "\n         EMPLOYEE DETAILS       " +
+                        "\n===============================");
                 for (Employee employee : employees) {
                     System.out.println(employee);
-                }}
+                }
+            }
         } catch (Exception e) {
             System.out.println("An error occurred while listing employees: " + e.getMessage());
         }
     }
+
 
     private void generateReport() {
         System.out.println("Generating Report...");
