@@ -41,8 +41,6 @@ public class StartView {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            // Here you would typically validate the credentials
-            // For now, we'll just assume it's valid and show the appropriate view
             if (username.equals("employee") & password.equals("password")) {
                 new EmployeeView().display();
             } else if (username.equals("manager") & password.equals("password")) {

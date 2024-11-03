@@ -74,7 +74,7 @@ public class ManagerView {
                         "\n==============================" );
             }
             for (Item item : items) {
-                System.out.println(item); // Ensure Item class has a proper toString method
+                System.out.println(item);
             }
 
         } catch (Exception e) {
@@ -128,85 +128,110 @@ public class ManagerView {
             System.out.print("Enter Sale ID: ");
             int id = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+
             System.out.print("Enter Item Name: ");
             String itemName = scanner.nextLine();
+
             System.out.print("Enter Item Price: ");
             double itemPrice = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline
+
             System.out.print("Enter User Name: ");
+            scanner.nextLine(); // Consume newline
             String userName = scanner.nextLine();
+
             System.out.print("Enter Quantity: ");
             int quantity = scanner.nextInt();
-            double totalPrice = itemPrice*quantity;
 
+            double totalPrice = itemPrice * quantity;
 
+            // Create a new Sell object with the gathered data
             Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-            sellController.addSell(sell);
-            System.out.println("Sale added successfully.");
+
+            // Assuming you have a method in your Client to handle the sale, send it to the server
+            String response = Client.addSell(sell); // Call the method to send the sell to the server
+            System.out.println(response != null ? response : "Failed to add sale.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter the correct data .");
+            System.out.println("Invalid input. Please enter the correct data.");
             scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
+
 
     private void removeSale() {
         try {
             System.out.print("Enter Sale ID to remove: ");
-            int id = scanner.nextInt();
-            sellController.removeSell(id);
-            System.out.println("Sale removed successfully (if it existed).");
+            int id = scanner.nextInt(); // Get the Sale ID from user input
+            String response = Client.removeSell(id);  // Use Client to send request to server
+            System.out.println(response != null ? response : "Failed to remove sale."); // Print response from server
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a number.");
+            System.out.println("Invalid input. Please enter a number."); // Handle invalid input
             scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage()); // Handle other exceptions
         }
     }
+
 
     private void updateSale() {
         try {
             System.out.print("Enter Sale ID to update: ");
             int id = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume newline
+
             System.out.print("Enter new Item Name: ");
             String itemName = scanner.nextLine();
+
             System.out.print("Enter new Item Price: ");
             double itemPrice = scanner.nextDouble();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume newline
+
             System.out.print("Enter new User Name: ");
             String userName = scanner.nextLine();
+
             System.out.print("Enter new Quantity: ");
             int quantity = scanner.nextInt();
-
-            double totalPrice = itemPrice*quantity;
+            double totalPrice = itemPrice * quantity;
             scanner.nextLine(); // Consume newline
-            System.out.print("Enter new Sale Date: ");
-            String sellDate = scanner.nextLine();
 
+
+
+            // Create an updated sale object with new details
             Sell updatedSell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-            sellController.updateSale(id, updatedSell);
-            System.out.println("Sale updated successfully.");
+
+            // Update the sale in the controller
+            String response = Client.updateSell(updatedSell); // Assuming Client sends the update request to the server
+            System.out.println(response != null ? response : "Failed to update sale.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter the correct data .");
-            scanner.nextLine(); // Clear the invalid input
+            System.out.println("Invalid input. Please enter the correct data.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
+
     private void listSales() {
         try {
-            ArrayList<Sell> sales = sellController.getAllSell();
-            if (sales.isEmpty()) {
+            System.out.println("Requesting updated list of sales from server...");
+            ArrayList<Sell> sales = Client.getAllSells(); // Use Client to fetch sales from the server
+
+            if (sales == null || sales.isEmpty()) {
                 System.out.println("No sales available.");
             } else {
                 System.out.println("\n**********************************" +
                         "\n           SELL DETAILS           " +
                         "\n**********************************" );
                 for (Sell sell : sales) {
-                    System.out.println(sell);
+                    System.out.println(sell); // Print each sale
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Failed to List Sales: " + e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred while listing sales: " + e.getMessage());
         }
     }
+
 
     private void handleRecoveries() {
         System.out.println("1. Add Recovery");
@@ -245,17 +270,19 @@ public class ManagerView {
             System.out.print("Enter Quantity: ");
             int quantity = scanner.nextInt();
 
-            double totalPrice = itemPrice*quantity;
+            double totalPrice = itemPrice * quantity;
             scanner.nextLine(); // Consume newline
             System.out.print("Enter Recovery Date: ");
             String recoveryDate = scanner.nextLine();
 
             Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-            recoveryController.addRecovery(recovery);
-            System.out.println("Recovery added successfully.");
+            String response = Client.addRecovery(recovery); // Use Client to send request to server
+            System.out.println(response != null ? response : "Failed to add recovery.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter the correct data .");
+            System.out.println("Invalid input. Please enter the correct data.");
             scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
@@ -263,59 +290,74 @@ public class ManagerView {
         try {
             System.out.print("Enter Recovery ID to remove: ");
             int id = scanner.nextInt();
-            recoveryController.removeRecovery(id);
-            System.out.println("Recovery removed successfully (if it existed).");
+            String response = Client.removeRecovery(id); // Use Client to send request to server
+            System.out.println(response != null ? response : "Failed to remove recovery.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
+
 
     private void updateRecovery() {
         try {
             System.out.print("Enter Recovery ID to update: ");
             int id = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+
             System.out.print("Enter new Item Name: ");
             String itemName = scanner.nextLine();
+
             System.out.print("Enter new Item Price: ");
             double itemPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+
             System.out.print("Enter new User Name: ");
             String userName = scanner.nextLine();
+
             System.out.print("Enter new Quantity: ");
             int quantity = scanner.nextInt();
+            double totalPrice = itemPrice * quantity;
+            scanner.nextLine(); // Consume newline
 
-            double totalPrice = itemPrice*quantity;
-            scanner.nextLine();
-            System.out.print("Enter new Recovery Date: ");
-            String recoveryDate = scanner.nextLine();
 
+
+            // Create an updated recovery object with new details
             Recovery updatedRecovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
-            recoveryController.updateRecovery(id, updatedRecovery);
-            System.out.println("Recovery updated successfully.");
+
+            // Update the recovery in the controller
+            String response = Client.updateRecovery(updatedRecovery); // Assuming Client sends the update request to the server
+            System.out.println(response != null ? response : "Failed to update recovery.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter the correct data .");
-            scanner.nextLine(); // Clear the invalid input
+            System.out.println("Invalid input. Please enter the correct data.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
     private void listRecoveries() {
         try {
-            ArrayList<Recovery> recoveries = recoveryController.getAllRecoveries();
-            if (recoveries.isEmpty()) {
+            System.out.println("Requesting updated list of recoveries from server...");
+            ArrayList<Recovery> recoveries = Client.getAllRecoveries(); // Use Client to fetch recoveries from the server
+
+            if (recoveries == null || recoveries.isEmpty()) {
                 System.out.println("No recoveries available.");
             } else {
                 System.out.println("\n----------------------------------" +
                         "\n          RECOVERY DETAILS        " +
-                        "\n----------------------------------" );
+                        "\n----------------------------------");
                 for (Recovery recovery : recoveries) {
-                    System.out.println(recovery);
+                    System.out.println(recovery); // Print each recovery
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Failed to List Recoveries: " + e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred while listing recoveries: " + e.getMessage());
         }
     }
+
 
     private void classifyItem() {
         System.out.println("Classifying Item...");

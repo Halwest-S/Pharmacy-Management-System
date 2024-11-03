@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Recovery implements Serializable {
+    private static final long serialVersionUID = 8916894777245262413L;
     private int recoveryID;
     private String itemName;
     private double itemPrice;

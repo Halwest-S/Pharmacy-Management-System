@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Sell implements Serializable {
+    private static final long serialVersionUID = 7661025235606081511L;
     private int sellID;
     private String itemName;
     private double itemPrice;

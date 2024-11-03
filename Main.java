@@ -1,16 +1,28 @@
 import controller.Client.Client;
-import model.Employee;
-import model.Item;
 import view.StartView;
-import controller.itemController;
-import controller.employeeController;
 
 public class Main {
-    public static void main(String []args){
-        Client.startConnection();
+    public static void main(String[] args) {
+        Client client = new Client();
 
+        try {
+            // Attempt to connect to the server
+            if (client.connect()) {
+                System.out.println("Connected to the server successfully.");
 
-        StartView StartView=new StartView();
-        StartView.display();
+                // Start the main application view
+                StartView startView = new StartView();
+                startView.display();
+            } else {
+                System.err.println("Failed to connect to the server after multiple attempts.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred during client operations: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Ensure disconnection from the server when application exits
+            client.disconnect();
+            System.out.println("Disconnected from server.");
+        }
     }
 }

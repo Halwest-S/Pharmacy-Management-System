@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Manager implements Serializable {
+    private static final long serialVersionUID = 4503646276650372829L;
     private int managerID;
     private String managerName;
     private String managerPassword;

@@ -5,6 +5,7 @@ import model.Recovery;
 import model.Sell;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class recoveryController {
     private static ArrayList<Recovery> recoveryList;
@@ -41,7 +42,7 @@ public class recoveryController {
     }
 
     // Get a recovery by ID
-    public Recovery getRecoveryById(int id) {
+    public static Recovery getRecoveryById(int id) {
         for (Recovery recovery : recoveryList) {
             if (recovery.getRecoveryID() == id) {
                 return recovery;
@@ -57,12 +58,19 @@ public class recoveryController {
     }
 
     // Update a recovery
-    public static void updateRecovery(int id, Recovery updatedRecovery) {
-        for (int i = 0; i < recoveryList.size(); i++) {
-            if (recoveryList.get(i).getRecoveryID() == id) {
-                recoveryList.set(i, updatedRecovery);
-                return; // Recovery updated successfully
-            }
+    public static void updateRecovery(int recoveryID, String itemName, double itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, Date recoveryDate) {
+        Recovery recovery = getRecoveryById(recoveryID);
+        if (recovery != null) {
+            recovery.setRecoveryID(recoveryID);
+            recovery.setItem(itemName);
+            recovery.setItemPrice(itemPrice);
+            recovery.setUserName(userName);
+            recovery.setRecoveryQuantity(recoveryQuantity);
+            recovery.setRecoveryTotalPrice(recoveryTotalPrice);
+            recovery.setRecoveryDate(recoveryDate);
+            saveRecovery();
+        } else {
+            System.out.println("Sale with ID " + recoveryID + " not found.");
         }
     }
 }

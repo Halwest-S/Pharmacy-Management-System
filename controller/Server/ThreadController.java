@@ -7,22 +7,22 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import controller.itemController;
-import controller.employeeController; // Ensure this is correctly spelled and imported
+import controller.employeeController;
 
 import model.Employee;
 import model.Item;
 
 public class ThreadController extends Thread {
-    private Socket socket;
+    private final Socket socket;
     private ObjectOutputStream outStream;
     private ObjectInputStream inStream;
     private final itemController itemController;
-    private final employeeController employeeController; // Make sure the naming is consistent
+    private final employeeController employeeController;
 
     public ThreadController(Socket socket) {
         this.socket = socket;
         this.itemController = new itemController();
-        this.employeeController = new employeeController(); // Initialize employeeController
+        this.employeeController = new employeeController();
     }
 
     public void run() {

@@ -5,6 +5,7 @@ import model.Item;
 import model.Sell;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class sellController {
     private static ArrayList<Sell> sellsList;
@@ -60,12 +61,21 @@ public class sellController {
     }
 
     // Update a sale
-    public static void updateSale(int id, Sell updatedSale) {
-        for (int i = 0; i < sellsList.size(); i++) {
-            if (sellsList.get(i).getSellID() == id) {
-                sellsList.set(i, updatedSale);
-                return;
-            }
+    // Update a sale by ID
+    public static void updateSale(int sellID, String itemName, double itemPrice, String userName, int sellQuantity, double sellTotalPrice, Date sellDate) {
+        Sell sale = getSellById(sellID);
+        if (sale != null) {
+         sale.setSellID(sellID);
+         sale.setItemName(itemName);
+         sale.setItemPrice(itemPrice);
+         sale.setUserName(userName);
+         sale.setSellQuantity(sellQuantity);
+         sale.setSellTotalPrice(sellTotalPrice);
+         sale.setSellDate(sellDate);
+            saveSells();
+        } else {
+            System.out.println("Sale with ID " + sellID + " not found.");
         }
     }
+
 }

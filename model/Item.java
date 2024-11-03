@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Item implements Serializable {
+    private static final long serialVersionUID = 4503646276650372829L;
     private int itemID;
     private String scientificName;
     private String commonName;
@@ -28,6 +29,10 @@ public class Item implements Serializable {
         this.quantity = quantity;
         this.importDate = importDate;
         this.expiryDate = expiryDate;
+    }
+
+    public Item() {
+
     }
 
     public int getItemID() {
