@@ -23,7 +23,7 @@ public class StartView {
                         System.out.println("Goodbye!");
                         return;
                     }
-                    default -> System.out.println("Invalid choice. Please try again.");
+                    default -> System.out.println("Invalid choice. Please try again.\n");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a number.");
@@ -41,12 +41,12 @@ public class StartView {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            if (username.equals("employee") & password.equals("password")) {
+            if (username.equals("employee") && password.equals("password")) {
                 new EmployeeView().display();
-            } else if (username.equals("manager") & password.equals("password")) {
+            } else if (username.equals("manager") && password.equals("password")) {
                 new ManagerView().display();
             } else {
-                System.out.println("Invalid credentials.");
+                System.out.println("Invalid credentials.\n");
             }
         } catch (Exception e) {
             System.out.println("An error occurred during login: " + e.getMessage());
