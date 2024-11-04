@@ -1,43 +1,40 @@
 package controller;
-import model.Employee;
-import java.util.ArrayList;
+
 import DAO.EmployeeDAO;
+import model.Employee;
+
+import java.util.ArrayList;
 
 public class employeeController {
     private EmployeeDAO employeeDAO;
 
     public employeeController() {
-        employeeDAO = new EmployeeDAO();
+        employeeDAO = new EmployeeDAO();  // Initialize EmployeeDAO for database operations
     }
 
-    public void addEmployee(Employee employee) {
-        if (employeeDAO.getEmployeeById(employee.getEmployeeID()) == null) {
-            employeeDAO.addEmployee(employee);
-        } else {
-            System.out.println("Employee with ID " + employee.getEmployeeID() + " already exists.");
-        }
+    // Add a new employee using database
+    public String addEmployee(Employee employee) {
+        return employeeDAO.addEmployee(employee);
     }
 
-    public void removeEmployee(int id) {
-        employeeDAO.deleteEmployee(id);
+    // Remove an employee from database
+    public String removeEmployee(int id) {
+        return employeeDAO.removeEmployee(id);
     }
 
+    // Get an employee by ID from database
     public Employee getEmployeeById(int id) {
         return employeeDAO.getEmployeeById(id);
     }
 
+    // Retrieve all employees from database
     public ArrayList<Employee> getAllEmployees() {
         return employeeDAO.getAllEmployees();
     }
 
-    public void updateEmployee(int id, String employeeName, String employeePassword) {
-        Employee employee = employeeDAO.getEmployeeById(id);
-        if (employee != null) {
-            employee.setEmployeeName(employeeName);
-            employee.setEmployeePassword(employeePassword);
-            employeeDAO.updateEmployee(employee);
-        } else {
-            System.out.println("Employee with ID " + id + " not found.");
-        }
+    // Update an employee's details in the database
+    public String updateEmployee(int id, String employeeName, String employeePassword) {
+        Employee employee = new Employee(id, employeeName, employeePassword);
+        return employeeDAO.updateEmployee(employee);
     }
 }

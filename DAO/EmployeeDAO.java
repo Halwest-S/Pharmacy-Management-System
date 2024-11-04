@@ -7,100 +7,158 @@ import Util.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 
+import java.util.List;
 
 
-    public class EmployeeDAO {
 
-        public void addEmployee(Employee employee) {
-            String insertUserSQL = "INSERT INTO User (Username, Password, RoleID) VALUES (?, ?, ?)";
-            String insertEmployeeSQL = "INSERT INTO Employee (UserID) VALUES (?)";
+public class EmployeeDAO {
+    // SQL queries
+    private static final String INSERT_USER = "INSERT INTO User (UserID, Username, Password, Role) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_EMPLOYEE = "INSERT INTO Employee (EmpID, UserID) VALUES (?, ?)";
+    private static final String UPDATE_USER = "UPDATE User SET Username = ?, Password = ? WHERE UserID = ?";
+    private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE EmpID = ?";
+    private static final String DELETE_USER = "DELETE FROM User WHERE UserID = ?";
+    private static final String SELECT_ALL_EMPLOYEES =
+            "SELECT e.EmpID, u.UserID, u.Username, u.Password " +
+                    "FROM Employee e " +
+                    "JOIN User u ON e.UserID = u.UserID";
+    private static final String SELECT_EMPLOYEE_BY_ID =
+            "SELECT e.EmpID, u.UserID, u.Username, u.Password " +
+                    "FROM Employee e " +
+                    "JOIN User u ON e.UserID = u.UserID " +
+                    "WHERE e.EmpID = ?";
 
-            try (Connection conn = DatabaseConnection.getConnection()) {
-                // Insert into User table first
-                PreparedStatement userStmt = conn.prepareStatement(insertUserSQL, Statement.RETURN_GENERATED_KEYS);
-                userStmt.setString(1, employee.getEmployeeName()); // Assuming employeeName is used as the username
-                userStmt.setString(2, employee.getEmployeePassword());
-                userStmt.setInt(3, 2); // Assuming '2' is the RoleID for Employee
-                userStmt.executeUpdate();
-
-                // Get the generated UserID
-                ResultSet generatedKeys = userStmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int userID = generatedKeys.getInt(1);
-
-                    // Insert into Employee table
-                    PreparedStatement employeeStmt = conn.prepareStatement(insertEmployeeSQL);
-                    employeeStmt.setInt(1, userID);
-                    employeeStmt.executeUpdate();
+    // Add an employee - returns String response for client
+    public String addEmployee(Employee employee) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                if (getEmployeeById(employee.getEmployeeID()) != null) {
+                    return "Employee with ID " + employee.getEmployeeID() + " already exists.";
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
 
-        public void deleteEmployee(int employeeID) {
-            String deleteEmployeeSQL = "DELETE FROM Employee WHERE EmployeeID = ?";
-            String deleteUserSQL = "DELETE FROM User WHERE UserID = (SELECT UserID FROM Employee WHERE EmployeeID = ?)";
-
-            try (Connection conn = DatabaseConnection.getConnection()) {
-                // Delete from Employee table first
-                PreparedStatement employeeStmt = conn.prepareStatement(deleteEmployeeSQL);
-                employeeStmt.setInt(1, employeeID);
-                employeeStmt.executeUpdate();
-
-                // Then delete the corresponding user
-                PreparedStatement userStmt = conn.prepareStatement(deleteUserSQL);
-                userStmt.setInt(1, employeeID);
-                userStmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public Employee getEmployeeById(int employeeID) {
-            String sql = "SELECT u.Username, u.Password FROM Employee e INNER JOIN User u ON e.UserID = u.UserID WHERE e.EmployeeID = ?";
-
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, employeeID);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    return new Employee(employeeID, rs.getString("Username"), rs.getString("Password"));
+                // First insert into User table
+                try (PreparedStatement userStmt = conn.prepareStatement(INSERT_USER)) {
+                    userStmt.setInt(1, employee.getEmployeeID());
+                    userStmt.setString(2, employee.getEmployeeName());
+                    userStmt.setString(3, employee.getEmployeePassword());
+                    userStmt.setString(4, "EMPLOYEE");
+                    userStmt.executeUpdate();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
 
-        public ArrayList<Employee> getAllEmployees() {
-            String sql = "SELECT e.EmployeeID, u.Username, u.Password FROM Employee e INNER JOIN User u ON e.UserID = u.UserID";
-            ArrayList<Employee> employees = new ArrayList<>();
-
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql);
-                 ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Employee employee = new Employee(rs.getInt("EmployeeID"), rs.getString("Username"), rs.getString("Password"));
-                    employees.add(employee);
+                // Then insert into Employee table
+                try (PreparedStatement empStmt = conn.prepareStatement(INSERT_EMPLOYEE)) {
+                    empStmt.setInt(1, employee.getEmployeeID());
+                    empStmt.setInt(2, employee.getEmployeeID());
+                    empStmt.executeUpdate();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return employees;
-        }
 
-        public void updateEmployee(Employee employee) {
-            String updateUserSQL = "UPDATE User SET Username = ?, Password = ? WHERE UserID = (SELECT UserID FROM Employee WHERE EmployeeID = ?)";
-
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(updateUserSQL)) {
-                stmt.setString(1, employee.getEmployeeName());
-                stmt.setString(2, employee.getEmployeePassword());
-                stmt.setInt(3, employee.getEmployeeID());
-                stmt.executeUpdate();
+                conn.commit();
+                return "Employee added successfully.";
             } catch (SQLException e) {
-                e.printStackTrace();
+                conn.rollback();
+                throw e;
             }
+        } catch (SQLException e) {
+            return "Error adding employee: " + e.getMessage();
         }
     }
+
+    // Remove an employee - returns String response for client
+    public String removeEmployee(int id) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (getEmployeeById(id) == null) {
+                return "Employee with ID " + id + " not found.";
+            }
+
+            conn.setAutoCommit(false);
+            try {
+                // First delete from Employee table
+                try (PreparedStatement empStmt = conn.prepareStatement(DELETE_EMPLOYEE)) {
+                    empStmt.setInt(1, id);
+                    empStmt.executeUpdate();
+                }
+
+                // Then delete from User table
+                try (PreparedStatement userStmt = conn.prepareStatement(DELETE_USER)) {
+                    userStmt.setInt(1, id);
+                    userStmt.executeUpdate();
+                }
+
+                conn.commit();
+                return "Employee removed successfully.";
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            return "Error removing employee: " + e.getMessage();
+        }
+    }
+
+    // Update an employee - returns String response for client
+    public String updateEmployee(Employee employee) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(UPDATE_USER)) {
+
+            if (getEmployeeById(employee.getEmployeeID()) == null) {
+                return "Employee with ID " + employee.getEmployeeID() + " not found.";
+            }
+
+            stmt.setString(1, employee.getEmployeeName());
+            stmt.setString(2, employee.getEmployeePassword());
+            stmt.setInt(3, employee.getEmployeeID());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                return "Employee updated successfully.";
+            } else {
+                return "Failed to update employee.";
+            }
+        } catch (SQLException e) {
+            return "Error updating employee: " + e.getMessage();
+        }
+    }
+
+    // Get employee by ID - helper method
+    public Employee getEmployeeById(int id) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_EMPLOYEE_BY_ID)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Employee(
+                        rs.getInt("EmpID"),
+                        rs.getString("Username"),
+                        rs.getString("Password")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Get all employees
+    public ArrayList<Employee> getAllEmployees() {
+        ArrayList<Employee> employees = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            ResultSet rs = stmt.executeQuery(SELECT_ALL_EMPLOYEES);
+
+            while (rs.next()) {
+                employees.add(new Employee(
+                        rs.getInt("EmpID"),
+                        rs.getString("Username"),
+                        rs.getString("Password")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+}
