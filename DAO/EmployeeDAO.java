@@ -28,7 +28,7 @@ public class EmployeeDAO {
                     "JOIN User u ON e.UserID = u.UserID " +
                     "WHERE e.EmpID = ?";
 
-    // Add an employee - returns String response for client
+
     public String addEmployee(Employee employee) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -37,7 +37,7 @@ public class EmployeeDAO {
                     return "Employee with ID " + employee.getEmployeeID() + " already exists.";
                 }
 
-                // First insert into User table
+
                 try (PreparedStatement userStmt = conn.prepareStatement(INSERT_USER)) {
                     userStmt.setInt(1, employee.getEmployeeID());
                     userStmt.setString(2, employee.getEmployeeName());
@@ -46,7 +46,7 @@ public class EmployeeDAO {
                     userStmt.executeUpdate();
                 }
 
-                // Then insert into Employee table
+
                 try (PreparedStatement empStmt = conn.prepareStatement(INSERT_EMPLOYEE)) {
                     empStmt.setInt(1, employee.getEmployeeID());
                     empStmt.setInt(2, employee.getEmployeeID());
@@ -64,7 +64,7 @@ public class EmployeeDAO {
         }
     }
 
-    // Remove an employee - returns String response for client
+
     public String removeEmployee(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (getEmployeeById(id) == null) {
@@ -73,13 +73,13 @@ public class EmployeeDAO {
 
             conn.setAutoCommit(false);
             try {
-                // First delete from Employee table
+
                 try (PreparedStatement empStmt = conn.prepareStatement(DELETE_EMPLOYEE)) {
                     empStmt.setInt(1, id);
                     empStmt.executeUpdate();
                 }
 
-                // Then delete from User table
+
                 try (PreparedStatement userStmt = conn.prepareStatement(DELETE_USER)) {
                     userStmt.setInt(1, id);
                     userStmt.executeUpdate();
@@ -96,7 +96,7 @@ public class EmployeeDAO {
         }
     }
 
-    // Update an employee - returns String response for client
+
     public String updateEmployee(Employee employee) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_USER)) {
@@ -120,7 +120,7 @@ public class EmployeeDAO {
         }
     }
 
-    // Get employee by ID - helper method
+
     public Employee getEmployeeById(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_EMPLOYEE_BY_ID)) {
@@ -141,7 +141,7 @@ public class EmployeeDAO {
         return null;
     }
 
-    // Get all employees
+
     public ArrayList<Employee> getAllEmployees() {
         ArrayList<Employee> employees = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();

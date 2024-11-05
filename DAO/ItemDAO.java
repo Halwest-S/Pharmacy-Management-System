@@ -14,7 +14,6 @@ public class ItemDAO {
     private static final String SELECT_ITEM_BY_ID = "SELECT * FROM Item WHERE itemID = ?";
     private static final String UPDATE_ITEM = "UPDATE Item SET scientificName = ?, commonName = ?, company = ?, country = ?, category = ?, importPrice = ?, exportPrice = ?, quantity = ?, importDate = ?, expiryDate = ? WHERE itemID = ?";
 
-    // Add an item - returns String response for client
     public String addItem(Item item) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -42,7 +41,6 @@ public class ItemDAO {
         }
     }
 
-    // Remove an item - returns String response for client
     public String removeItem(int itemID) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (getItemById(itemID) == null) {
@@ -59,7 +57,6 @@ public class ItemDAO {
         }
     }
 
-    // Update an item - returns String response for client
     public String updateItem(Item item) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (getItemById(item.getItemID()) == null) {
@@ -91,7 +88,6 @@ public class ItemDAO {
         }
     }
 
-    // Get item by ID - helper method
     public Item getItemById(int itemID) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ITEM_BY_ID)) {
@@ -120,7 +116,6 @@ public class ItemDAO {
         return null;
     }
 
-    // Get all items
     public ArrayList<Item> getAllItems() {
         ArrayList<Item> items = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();

@@ -12,113 +12,171 @@ import java.util.Date;
 public class SellDAO {
     // SQL queries
     private static final String INSERT_SELL = "INSERT INTO Sell (SellID, ItemID, UserID, SellQuantity, SellTotalPrice, SellDate) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String DELETE_SELL = "DELETE FROM Sell WHERE SellID = ?";
-    private static final String SELECT_SELL_BY_ID = "SELECT s.SellID, i.CommonName AS itemName, i.ExportPrice AS itemPrice, u.Username AS userName, s.SellQuantity, s.SellTotalPrice, s.SellDate " +
-            "FROM Sell s JOIN Item i ON s.ItemID = i.ItemID JOIN User u ON s.UserID = u.UserID WHERE s.SellID = ?";
-    private static final String SELECT_ALL_SELLS = "SELECT s.SellID, i.CommonName AS itemName, i.ExportPrice AS itemPrice, u.Username AS userName, s.SellQuantity, s.SellTotalPrice, s.SellDate " +
-            "FROM Sell s JOIN Item i ON s.ItemID = i.ItemID JOIN User u ON s.UserID = u.UserID";
     private static final String UPDATE_SELL = "UPDATE Sell SET ItemID = ?, UserID = ?, SellQuantity = ?, SellTotalPrice = ?, SellDate = ? WHERE SellID = ?";
-    private static final String SELECT_ITEM_ID_BY_NAME = "SELECT ItemID FROM Item WHERE CommonName = ?";
-    private static final String SELECT_USER_ID_BY_NAME = "SELECT UserID FROM User WHERE Username = ?";
+    private static final String DELETE_SELL = "DELETE FROM Sell WHERE SellID = ?";
+    private static final String SELECT_ALL_SELLS =
+            "SELECT s.SellID, i.CommonName as ItemName, i.ExportPrice as ItemPrice, " +
+                    "u.Username, s.SellQuantity, s.SellTotalPrice, s.SellDate " +
+                    "FROM Sell s " +
+                    "JOIN Item i ON s.ItemID = i.ItemID " +
+                    "JOIN User u ON s.UserID = u.UserID";
+    private static final String SELECT_SELL_BY_ID =
+            "SELECT s.SellID, i.CommonName as ItemName, i.ExportPrice as ItemPrice, " +
+                    "u.Username, s.SellQuantity, s.SellTotalPrice, s.SellDate " +
+                    "FROM Sell s " +
+                    "JOIN Item i ON s.ItemID = i.ItemID " +
+                    "JOIN User u ON s.UserID = u.UserID " +
+                    "WHERE s.SellID = ?";
+    private static final String GET_ITEM_ID = "SELECT ItemID FROM Item WHERE CommonName = ?";
+    private static final String GET_USER_ID = "SELECT UserID FROM User WHERE Username = ?";
 
-    // Add a new sale - returns String response for client
+    // In SellDAO class
     public String addSell(Sell sell) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                // Check if the sell already exists
-                if (getSellById(sell.getSellID()) != null) {
-                    return "Sale with ID " + sell.getSellID() + " already exists.";
+                // Debug print
+                System.out.println("Attempting to add sale: " + sell.getSellID());
+
+                // Get ItemID from ItemName
+                int itemId;
+                try (PreparedStatement stmt = conn.prepareStatement(GET_ITEM_ID)) {
+                    stmt.setString(1, sell.getItemName());
+                    ResultSet rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        System.out.println("Item not found: " + sell.getItemName());
+                        return "Item not found: " + sell.getItemName();
+                    }
+                    itemId = rs.getInt("ItemID");
+                    System.out.println("Found ItemID: " + itemId);
                 }
 
-                // Insert the new sale into the database
+                // Get UserID from Username
+                int userId;
+                try (PreparedStatement stmt = conn.prepareStatement(GET_USER_ID)) {
+                    stmt.setString(1, sell.getUserName());
+                    ResultSet rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        System.out.println("User not found: " + sell.getUserName());
+                        return "User not found: " + sell.getUserName();
+                    }
+                    userId = rs.getInt("UserID");
+                    System.out.println("Found UserID: " + userId);
+                }
+
+                // Insert the sale
                 try (PreparedStatement stmt = conn.prepareStatement(INSERT_SELL)) {
                     stmt.setInt(1, sell.getSellID());
-                    stmt.setInt(2, getItemIdByName(sell.getItemName())); // Fetch ItemID based on itemName
-                    stmt.setInt(3, getUserIdByName(sell.getUserName())); // Fetch UserID based on userName
+                    stmt.setInt(2, itemId);
+                    stmt.setInt(3, userId);
                     stmt.setInt(4, sell.getSellQuantity());
                     stmt.setDouble(5, sell.getSellTotalPrice());
                     stmt.setDate(6, new java.sql.Date(sell.getSellDate().getTime()));
-                    stmt.executeUpdate();
-                }
 
-                conn.commit();
-                return "Sale added successfully.";
+                    int rowsAffected = stmt.executeUpdate();
+                    System.out.println("Rows affected: " + rowsAffected);
+
+                    if (rowsAffected > 0) {
+                        conn.commit();
+                        return "Sale added successfully.";
+                    } else {
+                        conn.rollback();
+                        return "Failed to add sale.";
+                    }
+                }
             } catch (SQLException e) {
+                System.out.println("SQL Error: " + e.getMessage());
                 conn.rollback();
                 throw e;
             }
         } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
             return "Error adding sale: " + e.getMessage();
         }
     }
 
-    // Remove a sale - returns String response for client
-    public String removeSell(int sellID) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            if (getSellById(sellID) == null) {
-                return "Sale with ID " + sellID + " not found.";
-            }
+    public String removeSell(int id) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(DELETE_SELL)) {
 
-            conn.setAutoCommit(false);
-            try {
-                try (PreparedStatement stmt = conn.prepareStatement(DELETE_SELL)) {
-                    stmt.setInt(1, sellID);
-                    stmt.executeUpdate();
-                }
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
 
-                conn.commit();
+            if (rowsAffected > 0) {
                 return "Sale removed successfully.";
-            } catch (SQLException e) {
-                conn.rollback();
-                throw e;
+            } else {
+                return "Sale with ID " + id + " not found.";
             }
         } catch (SQLException e) {
             return "Error removing sale: " + e.getMessage();
         }
     }
 
-    // Update a sale - returns String response for client
     public String updateSell(Sell sell) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            if (getSellById(sell.getSellID()) == null) {
-                return "Sale with ID " + sell.getSellID() + " not found.";
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(UPDATE_SELL)) {
-                stmt.setInt(1, getItemIdByName(sell.getItemName())); // Fetch ItemID based on itemName
-                stmt.setInt(2, getUserIdByName(sell.getUserName())); // Fetch UserID based on userName
-                stmt.setInt(3, sell.getSellQuantity());
-                stmt.setDouble(4, sell.getSellTotalPrice());
-                stmt.setDate(5, new java.sql.Date(sell.getSellDate().getTime()));
-                stmt.setInt(6, sell.getSellID());
-
-                int rowsAffected = stmt.executeUpdate();
-                if (rowsAffected > 0) {
-                    return "Sale updated successfully.";
-                } else {
-                    return "Failed to update sale.";
+            conn.setAutoCommit(false);
+            try {
+                // Get ItemID from ItemName
+                int itemId;
+                try (PreparedStatement stmt = conn.prepareStatement(GET_ITEM_ID)) {
+                    stmt.setString(1, sell.getItemName());
+                    ResultSet rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        return "Item not found: " + sell.getItemName();
+                    }
+                    itemId = rs.getInt("ItemID");
                 }
+
+                // Get UserID from Username
+                int userId;
+                try (PreparedStatement stmt = conn.prepareStatement(GET_USER_ID)) {
+                    stmt.setString(1, sell.getUserName());
+                    ResultSet rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        return "User not found: " + sell.getUserName();
+                    }
+                    userId = rs.getInt("UserID");
+                }
+
+                // Update the sale
+                try (PreparedStatement stmt = conn.prepareStatement(UPDATE_SELL)) {
+                    stmt.setInt(1, itemId);
+                    stmt.setInt(2, userId);
+                    stmt.setInt(3, sell.getSellQuantity());
+                    stmt.setDouble(4, sell.getSellTotalPrice());
+                    stmt.setDate(5, new java.sql.Date(sell.getSellDate().getTime()));
+                    stmt.setInt(6, sell.getSellID());
+
+                    int rowsAffected = stmt.executeUpdate();
+                    if (rowsAffected == 0) {
+                        return "Sale with ID " + sell.getSellID() + " not found.";
+                    }
+                }
+
+                conn.commit();
+                return "Sale updated successfully.";
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
             }
         } catch (SQLException e) {
             return "Error updating sale: " + e.getMessage();
         }
     }
 
-    // Get a sale by ID - helper method
-    public Sell getSellById(int sellID) {
+    public Sell getSellById(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_SELL_BY_ID)) {
 
-            stmt.setInt(1, sellID);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return new Sell(
                         rs.getInt("SellID"),
-                        rs.getString("itemName"),
-                        rs.getDouble("itemPrice"),
-                        rs.getString("userName"),
+                        rs.getString("ItemName"),
+                        rs.getDouble("ItemPrice"),
+                        rs.getString("Username"),
                         rs.getInt("SellQuantity"),
                         rs.getDouble("SellTotalPrice"),
                         rs.getDate("SellDate")
@@ -130,7 +188,6 @@ public class SellDAO {
         return null;
     }
 
-    // Get all sales
     public ArrayList<Sell> getAllSells() {
         ArrayList<Sell> sells = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -141,9 +198,9 @@ public class SellDAO {
             while (rs.next()) {
                 sells.add(new Sell(
                         rs.getInt("SellID"),
-                        rs.getString("itemName"),
-                        rs.getDouble("itemPrice"),
-                        rs.getString("userName"),
+                        rs.getString("ItemName"),
+                        rs.getDouble("ItemPrice"),
+                        rs.getString("Username"),
                         rs.getInt("SellQuantity"),
                         rs.getDouble("SellTotalPrice"),
                         rs.getDate("SellDate")
@@ -153,39 +210,5 @@ public class SellDAO {
             e.printStackTrace();
         }
         return sells;
-    }
-
-    // Helper method to get ItemID by item name
-    private int getItemIdByName(String itemName) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_ITEM_ID_BY_NAME)) {
-
-            stmt.setString(1, itemName);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("ItemID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1; // Return -1 if not found
-    }
-
-    // Helper method to get UserID by user name
-    private int getUserIdByName(String userName) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_USER_ID_BY_NAME)) {
-
-            stmt.setString(1, userName);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("UserID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1; // Return -1 if not found
     }
 }

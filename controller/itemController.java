@@ -7,8 +7,6 @@ import model.Item;
 import java.util.ArrayList;
 
 
-import java.sql.SQLException;
-
 
 public class itemController {
     private static ItemDAO itemDAO;

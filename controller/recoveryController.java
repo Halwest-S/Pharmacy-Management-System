@@ -7,70 +7,55 @@ import model.Sell;
 import java.util.ArrayList;
 import java.util.Date;
 
+
+import DAO.RecoveryDAO;
+
+
 public class recoveryController {
-    private static ArrayList<Recovery> recoveryList;
-    private static final String FILE_NAME = "recovery.txt";
+    private RecoveryDAO recoveryDAO;
 
+    public recoveryController() {
+        recoveryDAO = new RecoveryDAO();
+    }
 
-
-    private static void loadRecovery() {
-        recoveryList = (ArrayList<Recovery>) FileUtil.readFromFile(FILE_NAME);
-        if (recoveryList == null) {
-
-            recoveryList = new ArrayList<>();
-
+    public String addRecovery(Recovery recovery) {
+        if (recoveryDAO.getRecoveryById(recovery.getRecoveryID()) != null) {
+            return "Recovery with ID " + recovery.getRecoveryID() + " already exists.";
         }
+        return recoveryDAO.addRecovery(recovery);
     }
 
-    private static void saveRecovery() {
-        FileUtil.writeToFile(FILE_NAME, recoveryList);
-    }
-
-
-
-
-    // Add a new recovery
-    public static void addRecovery(Recovery recovery) {
-        recoveryList.add(recovery);
-        saveRecovery();
-    }
-
-    // Remove a recovery by ID
-    public static void removeRecovery(int id) {
-        recoveryList.removeIf(recovery -> recovery.getRecoveryID() == id);
-        saveRecovery();
-    }
-
-    // Get a recovery by ID
-    public static Recovery getRecoveryById(int id) {
-        for (Recovery recovery : recoveryList) {
-            if (recovery.getRecoveryID() == id) {
-                return recovery;
-            }
+    public String removeRecovery(int recoveryID) {
+        if (recoveryDAO.getRecoveryById(recoveryID) == null) {
+            return "Recovery with ID " + recoveryID + " not found.";
         }
-        return null; // Recovery not found
+        return recoveryDAO.removeRecovery(recoveryID);
     }
 
-    // Get all recoveries
-    public static ArrayList<Recovery> getAllRecoveries() {
-        loadRecovery();
-        return recoveryList;
+    public Recovery getRecoveryById(int recoveryID) {
+        return recoveryDAO.getRecoveryById(recoveryID);
     }
 
-    // Update a recovery
-    public static void updateRecovery(int recoveryID, String itemName, double itemPrice, String userName, int recoveryQuantity, double recoveryTotalPrice, Date recoveryDate) {
-        Recovery recovery = getRecoveryById(recoveryID);
-        if (recovery != null) {
-            recovery.setRecoveryID(recoveryID);
-            recovery.setItem(itemName);
-            recovery.setItemPrice(itemPrice);
-            recovery.setUserName(userName);
-            recovery.setRecoveryQuantity(recoveryQuantity);
-            recovery.setRecoveryTotalPrice(recoveryTotalPrice);
-            recovery.setRecoveryDate(recoveryDate);
-            saveRecovery();
-        } else {
-            System.out.println("Sale with ID " + recoveryID + " not found.");
+    public ArrayList<Recovery> getAllRecoveries() {
+        return recoveryDAO.getAllRecoveries();
+    }
+
+    public String updateRecovery(int recoveryID, String itemName, double itemPrice,
+                                 String userName, int recoveryQuantity,
+                                 double recoveryTotalPrice, Date recoveryDate) {
+        Recovery recovery = recoveryDAO.getRecoveryById(recoveryID);
+        if (recovery == null) {
+            return "Recovery with ID " + recoveryID + " not found.";
         }
+
+        recovery.setRecoveryID(recoveryID);
+        recovery.setItem(itemName);
+        recovery.setItemPrice(itemPrice);
+        recovery.setUserName(userName);
+        recovery.setRecoveryQuantity(recoveryQuantity);
+        recovery.setRecoveryTotalPrice(recoveryTotalPrice);
+        recovery.setRecoveryDate(recoveryDate);
+
+        return recoveryDAO.updateRecovery(recovery);
     }
 }
