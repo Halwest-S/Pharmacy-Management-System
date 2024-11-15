@@ -6,11 +6,10 @@ public class Main {
         Client client = new Client();
 
         try {
-            // Attempt to connect to the server
+
             if (client.connect()) {
                 System.out.println("Connected to the server successfully.");
 
-                // Start the main application view
                 StartView startView = new StartView();
                 startView.display();
             } else {
@@ -20,7 +19,6 @@ public class Main {
             System.err.println("An error occurred during client operations: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            // Ensure disconnection from the server when application exits
             client.disconnect();
             System.out.println("Disconnected from server.");
         }

@@ -32,6 +32,8 @@ public class RecoveryDAO {
     private static final String GET_USER_ID =
             "SELECT UserID FROM User WHERE Username = ?";
 
+    private static final String Increase_Item_Quantity = "UPDATE Item SET Quantity = Quantity + ? WHERE ItemID = ?";
+
     public String addRecovery(Recovery recovery) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -58,6 +60,17 @@ public class RecoveryDAO {
                     userId = rs.getInt("UserID");
                 }
 
+                // Increment the item quantity
+                try (PreparedStatement stmt = conn.prepareStatement(Increase_Item_Quantity)) {
+                    stmt.setInt(1, recovery.getRecoveryQuantity());
+                    stmt.setInt(2, itemId);
+                    int quantityUpdated = stmt.executeUpdate();
+                    if (quantityUpdated == 0) {
+                        conn.rollback();
+                        return "Failed to update item quantity for: " + recovery.getItemName();
+                    }
+                }
+
                 // Insert the recovery
                 try (PreparedStatement stmt = conn.prepareStatement(INSERT_RECOVERY)) {
                     stmt.setInt(1, recovery.getRecoveryID());
@@ -66,11 +79,15 @@ public class RecoveryDAO {
                     stmt.setInt(4, recovery.getRecoveryQuantity());
                     stmt.setDouble(5, recovery.getRecoveryTotalPrice());
                     stmt.setDate(6, new java.sql.Date(recovery.getRecoveryDate().getTime()));
-                    stmt.executeUpdate();
+                    int rowsAffected = stmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        conn.commit();
+                        return "Recovery added successfully.";
+                    } else {
+                        conn.rollback();
+                        return "Failed to add recovery.";
+                    }
                 }
-
-                conn.commit();
-                return "Recovery added successfully.";
             } catch (SQLException e) {
                 conn.rollback();
                 throw e;

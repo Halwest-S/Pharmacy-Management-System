@@ -29,26 +29,22 @@ public class SellDAO {
                     "WHERE s.SellID = ?";
     private static final String GET_ITEM_ID = "SELECT ItemID FROM Item WHERE CommonName = ?";
     private static final String GET_USER_ID = "SELECT UserID FROM User WHERE Username = ?";
+    private static final String Decrease_Item_Quantity = "UPDATE Item SET Quantity = Quantity - ? WHERE ItemID = ?";
 
     // In SellDAO class
     public String addSell(Sell sell) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                // Debug print
-                System.out.println("Attempting to add sale: " + sell.getSellID());
-
                 // Get ItemID from ItemName
                 int itemId;
                 try (PreparedStatement stmt = conn.prepareStatement(GET_ITEM_ID)) {
                     stmt.setString(1, sell.getItemName());
                     ResultSet rs = stmt.executeQuery();
                     if (!rs.next()) {
-                        System.out.println("Item not found: " + sell.getItemName());
                         return "Item not found: " + sell.getItemName();
                     }
                     itemId = rs.getInt("ItemID");
-                    System.out.println("Found ItemID: " + itemId);
                 }
 
                 // Get UserID from Username
@@ -57,11 +53,20 @@ public class SellDAO {
                     stmt.setString(1, sell.getUserName());
                     ResultSet rs = stmt.executeQuery();
                     if (!rs.next()) {
-                        System.out.println("User not found: " + sell.getUserName());
                         return "User not found: " + sell.getUserName();
                     }
                     userId = rs.getInt("UserID");
-                    System.out.println("Found UserID: " + userId);
+                }
+
+                // Decrement the item quantity
+                try (PreparedStatement stmt = conn.prepareStatement(Decrease_Item_Quantity)) {
+                    stmt.setInt(1, sell.getSellQuantity());
+                    stmt.setInt(2, itemId);
+                    int quantityUpdated = stmt.executeUpdate();
+                    if (quantityUpdated == 0) {
+                        conn.rollback();
+                        return "Insufficient stock for item: " + sell.getItemName();
+                    }
                 }
 
                 // Insert the sale
@@ -74,8 +79,6 @@ public class SellDAO {
                     stmt.setDate(6, new java.sql.Date(sell.getSellDate().getTime()));
 
                     int rowsAffected = stmt.executeUpdate();
-                    System.out.println("Rows affected: " + rowsAffected);
-
                     if (rowsAffected > 0) {
                         conn.commit();
                         return "Sale added successfully.";
@@ -85,16 +88,13 @@ public class SellDAO {
                     }
                 }
             } catch (SQLException e) {
-                System.out.println("SQL Error: " + e.getMessage());
                 conn.rollback();
                 throw e;
             }
         } catch (SQLException e) {
-            System.out.println("Database Error: " + e.getMessage());
             return "Error adding sale: " + e.getMessage();
         }
     }
-
     public String removeSell(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_SELL)) {

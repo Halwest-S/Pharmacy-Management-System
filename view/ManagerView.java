@@ -144,15 +144,15 @@ public class ManagerView {
 
             double totalPrice = itemPrice * quantity;
 
-            // Create a new Sell object with the gathered data
+
             Sell sell = new Sell(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
 
-            // Assuming you have a method in your Client to handle the sale, send it to the server
-            String response = Client.addSell(sell); // Call the method to send the sell to the server
+
+            String response = Client.addSell(sell);
             System.out.println(response != null ? response : "Failed to add sale.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter the correct data.");
-            scanner.nextLine(); // Clear the invalid input
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
@@ -162,14 +162,14 @@ public class ManagerView {
     private void removeSale() {
         try {
             System.out.print("Enter Sale ID to remove: ");
-            int id = scanner.nextInt(); // Get the Sale ID from user input
-            String response = Client.removeSell(id);  // Use Client to send request to server
-            System.out.println(response != null ? response : "Failed to remove sale."); // Print response from server
+            int id = scanner.nextInt();
+            String response = Client.removeSell(id);
+            System.out.println(response != null ? response : "Failed to remove sale.");
         } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a number."); // Handle invalid input
+            System.out.println("Invalid input. Please enter a number.");
             scanner.nextLine(); // Clear the invalid input
         } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage()); // Handle other exceptions
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
@@ -178,14 +178,14 @@ public class ManagerView {
         try {
             System.out.print("Enter Sale ID to update: ");
             int id = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             System.out.print("Enter new Item Name: ");
             String itemName = scanner.nextLine();
 
             System.out.print("Enter new Item Price: ");
             double itemPrice = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             System.out.print("Enter new User Name: ");
             String userName = scanner.nextLine();
@@ -193,7 +193,7 @@ public class ManagerView {
             System.out.print("Enter new Quantity: ");
             int quantity = scanner.nextInt();
             double totalPrice = itemPrice * quantity;
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
 
 
@@ -272,8 +272,8 @@ public class ManagerView {
 
             double totalPrice = itemPrice * quantity;
             scanner.nextLine(); // Consume newline
-            System.out.print("Enter Recovery Date: ");
-            String recoveryDate = scanner.nextLine();
+
+
 
             Recovery recovery = new Recovery(id, itemName, itemPrice, userName, quantity, totalPrice, new Date());
             String response = Client.addRecovery(recovery); // Use Client to send request to server
