@@ -140,7 +140,33 @@ public class RecoveryDAO {
                     userId = rs.getInt("UserID");
                 }
 
-                // Update the recovery
+                // Fetch the old quantity of the recovery to adjust item stock correctly
+                int oldQuantity;
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        "SELECT RecQuantity FROM Recovery WHERE RecID = ?"
+                )) {
+                    stmt.setInt(1, recovery.getRecoveryID());
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        oldQuantity = rs.getInt("RecQuantity");
+                    } else {
+                        return "Recovery with ID " + recovery.getRecoveryID() + " not found.";
+                    }
+                }
+
+                // Update the item quantity in the Item table
+                int quantityDifference = recovery.getRecoveryQuantity() - oldQuantity;
+                try (PreparedStatement stmt = conn.prepareStatement(Increase_Item_Quantity)) {
+                    stmt.setInt(1, quantityDifference);
+                    stmt.setInt(2, itemId);
+                    int quantityUpdated = stmt.executeUpdate();
+                    if (quantityUpdated == 0) {
+                        conn.rollback();
+                        return "Failed to update item quantity for: " + recovery.getItemName();
+                    }
+                }
+
+                // Update the recovery record
                 try (PreparedStatement stmt = conn.prepareStatement(UPDATE_RECOVERY)) {
                     stmt.setInt(1, itemId);
                     stmt.setInt(2, userId);
@@ -151,6 +177,7 @@ public class RecoveryDAO {
 
                     int rowsAffected = stmt.executeUpdate();
                     if (rowsAffected == 0) {
+                        conn.rollback();
                         return "Recovery with ID " + recovery.getRecoveryID() + " not found.";
                     }
                 }

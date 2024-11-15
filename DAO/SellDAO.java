@@ -116,6 +116,17 @@ public class SellDAO {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
+                // Get the original sell quantity before update
+                int originalQuantity = 0;
+                try (PreparedStatement stmt = conn.prepareStatement("SELECT SellQuantity, ItemID FROM Sell WHERE SellID = ?")) {
+                    stmt.setInt(1, sell.getSellID());
+                    ResultSet rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        return "Sale with ID " + sell.getSellID() + " not found.";
+                    }
+                    originalQuantity = rs.getInt("SellQuantity");
+                }
+
                 // Get ItemID from ItemName
                 int itemId;
                 try (PreparedStatement stmt = conn.prepareStatement(GET_ITEM_ID)) {
@@ -138,6 +149,22 @@ public class SellDAO {
                     userId = rs.getInt("UserID");
                 }
 
+                // Calculate the quantity difference
+                int quantityDifference = sell.getSellQuantity() - originalQuantity;
+
+                // Update item quantity
+                if (quantityDifference != 0) {  // Only update if quantity has changed
+                    try (PreparedStatement stmt = conn.prepareStatement("UPDATE Item SET Quantity = Quantity - ? WHERE ItemID = ?")) {
+                        stmt.setInt(1, quantityDifference);
+                        stmt.setInt(2, itemId);
+                        int quantityUpdated = stmt.executeUpdate();
+                        if (quantityUpdated == 0) {
+                            conn.rollback();
+                            return "Failed to update item quantity.";
+                        }
+                    }
+                }
+
                 // Update the sale
                 try (PreparedStatement stmt = conn.prepareStatement(UPDATE_SELL)) {
                     stmt.setInt(1, itemId);
@@ -149,6 +176,7 @@ public class SellDAO {
 
                     int rowsAffected = stmt.executeUpdate();
                     if (rowsAffected == 0) {
+                        conn.rollback();
                         return "Sale with ID " + sell.getSellID() + " not found.";
                     }
                 }
@@ -163,7 +191,6 @@ public class SellDAO {
             return "Error updating sale: " + e.getMessage();
         }
     }
-
     public Sell getSellById(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_SELL_BY_ID)) {
