@@ -259,7 +259,7 @@ public class ClientHandler implements Runnable {
 
     private void handleGetAllSells() throws IOException {
         try {
-            ArrayList<Sell> sells = sellController.getAllSell();
+            ArrayList<Sell> sells = sellController.getAllSells();
             output.writeObject(sells);
         } catch (Exception e) {
             sendResponse("Error retrieving sales: " + e.getMessage());
@@ -269,7 +269,7 @@ public class ClientHandler implements Runnable {
     private void handleUpdateSell() throws IOException, ClassNotFoundException {
         Sell sell = (Sell) input.readObject();
         try {
-            sellController.updateSale(
+            sellController.updateSell(
                     sell.getSellID(),
                     sell.getItemName(),
                     sell.getItemPrice(),
